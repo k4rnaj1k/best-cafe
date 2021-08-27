@@ -1,0 +1,9 @@
+language: java
+sudo: false
+script: mvn clean verify
+deploy:
+  on:
+    branch: master
+  provider: heroku
+  api_key: $HEROKU_KEY
+  app: $HEROKU_APP
