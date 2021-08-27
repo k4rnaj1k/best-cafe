@@ -1,4 +1,5 @@
 ![cafe image](img/cafe_logo.jpeg)
+
 Cafe service.
 
 To run, some environment variables needed:

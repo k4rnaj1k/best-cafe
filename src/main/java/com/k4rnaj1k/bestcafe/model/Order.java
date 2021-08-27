@@ -1,26 +1,50 @@
 package com.k4rnaj1k.bestcafe.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.k4rnaj1k.bestcafe.configuration.Views;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Entity
 @Table(name = "orders")
-public class Order implements Serializable {
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(Views.Get.class)
     private Long id;
 
-    @OneToMany(mappedBy = "order")
-    @JsonIgnoreProperties("order")
+    @OneToMany
+    @JsonView(Views.PostOrder.class)
+//    @JsonIgnoreProperties("order")
     private List<DishItem> dishes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "order")
-    @JsonIgnoreProperties("order")
+    @JsonView(Views.PutOrder.class)
+    private OrderStatus status;
+
+    public Order() {
+        this.status = OrderStatus.SENT;
+    }
+
+    public enum OrderStatus {
+        SENT(1),
+        ACCEPTED(2),
+        DONE(3);
+        private final int value;
+
+        public int getValue() {
+            return value;
+        }
+
+        OrderStatus(int value) {
+            this.value = value;
+        }
+    }
+
+    @OneToMany
+    @JsonView(Views.PostOrder.class)
     private List<DrinkItem> drinks = new ArrayList<>();
 }

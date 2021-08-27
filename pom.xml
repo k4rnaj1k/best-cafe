@@ -41,6 +41,12 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>org.bitbucket.bradleysmithllc.etlunit</groupId>
+            <artifactId>h2-database</artifactId>
+            <version>1.8.16</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.5.10</version>
