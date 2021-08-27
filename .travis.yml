@@ -1,6 +1,8 @@
 language: java
 jdk: openjdk16
-sudo: false
+sudo: true
+before_install:
+  - chmod +x mvnw
 deploy:
   on:
     branch: master
