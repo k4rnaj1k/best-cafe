@@ -1,8 +1,6 @@
 language: java
+jdk: openjdk16
 sudo: false
-install:
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-script: mvn clean verify
 deploy:
   on:
     branch: master
