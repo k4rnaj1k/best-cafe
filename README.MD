@@ -1,3 +1,5 @@
+[![Build Status](https://app.travis-ci.com/k4rnaj1k/best-cafe.svg?token=y64nymv4bg4ZJxLarA5L&branch=master)](https://app.travis-ci.com/k4rnaj1k/best-cafe)
+
 ![cafe image](img/cafe_logo.jpeg)
 
 Cafe service.
