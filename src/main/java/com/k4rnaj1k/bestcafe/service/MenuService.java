@@ -47,10 +47,10 @@ public class MenuService {
     }
 
     public Ingredient updateIngredient(Long ingredientId, Ingredient ingredient) {
-        if(ingredientRepository.existsByName(ingredient.getName())){
+        if (ingredientRepository.existsByName(ingredient.getName())) {
             throw CafeException.ingredientAlreadyExists(ingredient.getName());
         }
-        Ingredient ingredientFromDb = ingredientRepository.findById(ingredientId).orElseThrow(()-> CafeException.ingredientDoesntExist(ingredientId));
+        Ingredient ingredientFromDb = ingredientRepository.findById(ingredientId).orElseThrow(() -> CafeException.ingredientDoesntExist(ingredientId));
         ingredientFromDb.setName(ingredient.getName());
         return ingredientRepository.save(ingredientFromDb);
     }

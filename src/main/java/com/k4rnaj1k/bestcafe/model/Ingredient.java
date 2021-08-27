@@ -2,11 +2,12 @@ package com.k4rnaj1k.bestcafe.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.k4rnaj1k.bestcafe.configuration.Views;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Data;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Data
 @Table(name = "ingredients")
@@ -22,7 +23,7 @@ public class Ingredient {
     @JsonView(Views.PostIngredient.class)
     private String name;
 
-//    @ManyToMany(mappedBy = "ingredients")
-//    @JsonView(Views.AlterFull.class)
-//    private List<Dish> dishes;
+    @ManyToMany(mappedBy = "ingredients")
+    @Hidden
+    private List<Dish> dishes;
 }

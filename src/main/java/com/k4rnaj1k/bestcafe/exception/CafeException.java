@@ -1,6 +1,5 @@
 package com.k4rnaj1k.bestcafe.exception;
 
-import com.k4rnaj1k.bestcafe.model.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 

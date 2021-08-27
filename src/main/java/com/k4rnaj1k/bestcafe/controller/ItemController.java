@@ -6,6 +6,7 @@ import com.k4rnaj1k.bestcafe.model.Dish;
 import com.k4rnaj1k.bestcafe.model.Drink;
 import com.k4rnaj1k.bestcafe.model.Ingredient;
 import com.k4rnaj1k.bestcafe.service.MenuService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1")
 @JsonView(Views.Get.class)
+@Slf4j
 public class ItemController {
     private final MenuService itemService;
 
@@ -22,6 +24,7 @@ public class ItemController {
 
     @PostMapping("ingredients")
     public Ingredient createIngredient(@RequestBody @JsonView(Views.PostIngredient.class) Ingredient ingredient) {
+        log.info("{}", ingredient.getName());
         return itemService.createIngredient(ingredient);
     }
 

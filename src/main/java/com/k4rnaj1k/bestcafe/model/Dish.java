@@ -1,7 +1,5 @@
 package com.k4rnaj1k.bestcafe.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.k4rnaj1k.bestcafe.configuration.Views;
 import lombok.Data;
@@ -25,7 +23,7 @@ public class Dish {
     @NotBlank
     private String name;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "dish_ingredients",
             joinColumns = @JoinColumn(name = "dish_id"),
