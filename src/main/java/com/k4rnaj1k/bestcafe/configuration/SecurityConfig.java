@@ -1,10 +1,9 @@
 package com.k4rnaj1k.bestcafe.configuration;
 
-import com.k4rnaj1k.bestcafe.Routes;
+import com.k4rnaj1k.bestcafe.controller.Routes;
 import com.k4rnaj1k.bestcafe.security.jwt.JwtConfigurer;
 import com.k4rnaj1k.bestcafe.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.reactive.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -37,9 +36,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, Routes.DISHES, Routes.DRINKS).hasRole("USER")
-                .antMatchers(HttpMethod.POST, Routes.ORDERS).hasRole("COOK")
+                .antMatchers(HttpMethod.POST, Routes.ORDERS).hasRole("USER")
                 .antMatchers(Routes.INGREDIENTS, Routes.ORDERS).hasRole("COOK")
                 .antMatchers(HttpMethod.POST, Routes.DISHES).hasRole("COOK")
+                .antMatchers(HttpMethod.PUT, Routes.ORDERS_STATUS).hasRole("COOK")
                 .antMatchers(Routes.ADMIN).hasRole("ADMIN")
                 .antMatchers(Routes.USERS).anonymous()
                 .and()

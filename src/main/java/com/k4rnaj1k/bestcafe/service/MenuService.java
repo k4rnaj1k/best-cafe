@@ -1,5 +1,7 @@
 package com.k4rnaj1k.bestcafe.service;
 
+import com.k4rnaj1k.bestcafe.dto.menuitem.DishPostDTO;
+import com.k4rnaj1k.bestcafe.dto.menuitem.IngredientDTO;
 import com.k4rnaj1k.bestcafe.exception.CafeException;
 import com.k4rnaj1k.bestcafe.model.Dish;
 import com.k4rnaj1k.bestcafe.model.Drink;
@@ -31,13 +33,15 @@ public class MenuService {
         return dishRepository.findAll();
     }
 
-    public Ingredient createIngredient(Ingredient ingredient) {
+    public Ingredient createIngredient(IngredientDTO ingredientDTO) {
+        Ingredient ingredient = Ingredient.fromDTO(ingredientDTO);
         if (ingredientRepository.existsByName(ingredient.getName()))
             throw CafeException.ingredientAlreadyExists(ingredient.getName());
         return ingredientRepository.save(ingredient);
     }
 
-    public Dish createDish(Dish dish) {
+    public Dish createDish(DishPostDTO dishPostDTO) {
+        Dish dish = Dish.fromPostDTO(dishPostDTO);
         dish.getIngredients().forEach(ingredient -> {
             Long id = ingredient.getId();
             ingredient.setName(ingredientRepository.findById(id)
@@ -46,12 +50,12 @@ public class MenuService {
         return dishRepository.save(dish);
     }
 
-    public Ingredient updateIngredient(Long ingredientId, Ingredient ingredient) {
-        if (ingredientRepository.existsByName(ingredient.getName())) {
-            throw CafeException.ingredientAlreadyExists(ingredient.getName());
+    public Ingredient updateIngredient(Long ingredientId, IngredientDTO ingredientDTO) {
+        if (ingredientRepository.existsByName(ingredientDTO.getName())) {
+            throw CafeException.ingredientAlreadyExists(ingredientDTO.getName());
         }
         Ingredient ingredientFromDb = ingredientRepository.findById(ingredientId).orElseThrow(() -> CafeException.ingredientDoesntExist(ingredientId));
-        ingredientFromDb.setName(ingredient.getName());
+        ingredientFromDb.setName(ingredientDTO.getName());
         return ingredientRepository.save(ingredientFromDb);
     }
 
