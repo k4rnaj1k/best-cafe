@@ -1,9 +1,8 @@
 spring:
   datasource:
     url: ${DATABASE_URL}
+    open-in-view: on
   jpa:
-    hibernate:
-      ddl-auto: create
     open-in-view: on
 server:
   error:
