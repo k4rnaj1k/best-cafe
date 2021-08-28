@@ -1,7 +1,6 @@
 package com.k4rnaj1k.bestcafe.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.k4rnaj1k.bestcafe.configuration.Views;
+import com.k4rnaj1k.bestcafe.dto.menuitem.DishPostDTO;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,11 +14,9 @@ import java.util.List;
 public class Dish {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({Views.Get.class, Views.PostOrder.class})
     private Long id;
 
     @Column(unique = true)
-    @JsonView({Views.PostDish.class})
     @NotBlank
     private String name;
 
@@ -28,6 +25,15 @@ public class Dish {
             name = "dish_ingredients",
             joinColumns = @JoinColumn(name = "dish_id"),
             inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
-    @JsonView(Views.PostDish.class)
     private List<Ingredient> ingredients = new ArrayList<>();
+
+    public static Dish fromPostDTO(DishPostDTO dishPostDTO) {
+        Dish dish = new Dish();
+        List<Ingredient> ingredients = new ArrayList<>();
+        dishPostDTO.getIngredients().forEach(id -> {
+            Ingredient ingredient = new Ingredient();
+            ingredients.add(ingredient);});
+        dish.setIngredients(ingredients);
+        return dish;
+    }
 }

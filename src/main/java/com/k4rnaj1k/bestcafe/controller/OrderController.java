@@ -1,7 +1,6 @@
 package com.k4rnaj1k.bestcafe.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.k4rnaj1k.bestcafe.configuration.Views;
+import com.k4rnaj1k.bestcafe.dto.order.OrderDTO;
 import com.k4rnaj1k.bestcafe.model.Order;
 import com.k4rnaj1k.bestcafe.service.OrderService;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,7 @@ public class OrderController {
     }
 
     @PostMapping("orders")
-    public Order createOrder(@RequestBody @JsonView(Views.PostOrder.class) Order order) {
+    public Order createOrder(@RequestBody OrderDTO order) {
         return orderService.createOrder(order);
     }
 

@@ -1,7 +1,6 @@
 package com.k4rnaj1k.bestcafe.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.k4rnaj1k.bestcafe.configuration.Views;
+import com.k4rnaj1k.bestcafe.dto.order.OrderDTO;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,19 +13,53 @@ import java.util.List;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Get.class)
     private Long id;
 
     @OneToMany
-    @JsonView(Views.PostOrder.class)
 //    @JsonIgnoreProperties("order")
     private List<DishItem> dishes = new ArrayList<>();
 
-    @JsonView(Views.PutOrder.class)
     private OrderStatus status;
 
     public Order() {
         this.status = OrderStatus.SENT;
+    }
+
+    public static Order fromDTO(OrderDTO orderDTO) {
+        Order order = new Order();
+        List<DishItem> dishes = new ArrayList<>();
+        orderDTO.getDishes().forEach(dishItemDTO -> {
+            DishItem dishItem = new DishItem();
+
+            Dish dish = new Dish();
+            dish.setId(dishItemDTO.getDishId());
+            dishItem.setDish(dish);
+
+            dishItem.setAmount(dishItemDTO.getAmount());
+
+            List<Ingredient> excluded = new ArrayList<>();
+            dishItemDTO.getExcludedIngredients().forEach(ingredientId -> {
+                Ingredient ingredient = new Ingredient();
+                ingredient.setId(ingredientId);
+                excluded.add(ingredient);
+            });
+            dishItem.setExcluded(excluded);
+
+            dishes.add(dishItem);
+        });
+        order.setDishes(dishes);
+
+        List<DrinkItem> drinks = new ArrayList<>();
+        orderDTO.getDrinks().forEach(drinkItemDTO -> {
+            Drink drink = new Drink();
+            drink.setId(drinkItemDTO.getDrinkId());
+
+            DrinkItem drinkItem = new DrinkItem();
+            drinkItem.setDrink(drink);
+            drinkItem.setAmount(drinkItemDTO.getAmount());
+        });
+        order.setDrinks(drinks);
+        return order;
     }
 
     public enum OrderStatus {
@@ -45,6 +78,5 @@ public class Order {
     }
 
     @OneToMany
-    @JsonView(Views.PostOrder.class)
     private List<DrinkItem> drinks = new ArrayList<>();
 }

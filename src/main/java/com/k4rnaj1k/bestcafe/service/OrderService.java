@@ -1,5 +1,6 @@
 package com.k4rnaj1k.bestcafe.service;
 
+import com.k4rnaj1k.bestcafe.dto.order.OrderDTO;
 import com.k4rnaj1k.bestcafe.exception.CafeException;
 import com.k4rnaj1k.bestcafe.model.Order;
 import com.k4rnaj1k.bestcafe.repository.*;
@@ -23,7 +24,8 @@ public class OrderService {
         this.dishRepository = dishRepository;
     }
 
-    public Order createOrder(Order order) {
+    public Order createOrder(OrderDTO orderDTO) {
+        Order order = Order.fromDTO(orderDTO);
         if (order.getDishes().size() == 0 && order.getDrinks().size() == 0) {
             throw CafeException.emptyOrderException();
         }
