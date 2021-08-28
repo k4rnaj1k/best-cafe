@@ -1,7 +1,7 @@
 package com.k4rnaj1k.bestcafe.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.k4rnaj1k.bestcafe.configuration.Views;
+import com.k4rnaj1k.bestcafe.dto.menuitem.DishPostDTO;
+import com.k4rnaj1k.bestcafe.dto.menuitem.IngredientDTO;
 import com.k4rnaj1k.bestcafe.model.Dish;
 import com.k4rnaj1k.bestcafe.model.Drink;
 import com.k4rnaj1k.bestcafe.model.Ingredient;
@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1")
-@JsonView(Views.Get.class)
 @Slf4j
 public class ItemController {
     private final MenuService itemService;
@@ -28,9 +27,8 @@ public class ItemController {
     }
 
     @PostMapping("ingredients")
-    public Ingredient createIngredient(@RequestBody @JsonView(Views.PostIngredient.class) Ingredient ingredient) {
-        log.info("{}", ingredient.getName());
-        return itemService.createIngredient(ingredient);
+    public Ingredient createIngredient(@RequestBody IngredientDTO ingredientDto) {
+        return itemService.createIngredient(ingredientDto);
     }
 
     @GetMapping("drinks")
@@ -44,8 +42,8 @@ public class ItemController {
     }
 
     @PostMapping("dishes")
-    public Dish createDish(@RequestBody @JsonView(Views.PostDish.class) Dish dish) {
-        return itemService.createDish(dish);
+    public Dish createDish(@RequestBody DishPostDTO dishPostDTO) {
+        return itemService.createDish(dishPostDTO);
     }
 
     @GetMapping("ingredients")
@@ -54,7 +52,7 @@ public class ItemController {
     }
 
     @PutMapping("ingredients/{id}")
-    public Ingredient updateIngredient(@PathVariable("id") Long ingredientId, @RequestBody @JsonView(Views.PostIngredient.class) Ingredient updatedIngredient) {
+    public Ingredient updateIngredient(@PathVariable("id") Long ingredientId, @RequestBody IngredientDTO updatedIngredient) {
         return itemService.updateIngredient(ingredientId, updatedIngredient);
     }
 }

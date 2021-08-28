@@ -1,6 +1,7 @@
 package com.k4rnaj1k.bestcafe.service;
 
 import com.k4rnaj1k.bestcafe.dto.RegistrationRequestDTO;
+import com.k4rnaj1k.bestcafe.dto.UserRoleUpdateDTO;
 import com.k4rnaj1k.bestcafe.exception.AuthorizationException;
 import com.k4rnaj1k.bestcafe.model.auth.Role;
 import com.k4rnaj1k.bestcafe.model.auth.Status;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -69,5 +71,24 @@ public class UserService {
         user.setCreatedAt(now);
         user.setUpdatedAt(now);
         return userRepository.save(user);
+    }
+
+    public User updateUserRoles(UserRoleUpdateDTO updateDTO) {
+        User user = userRepository.findByUsername(updateDTO.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("Username " + updateDTO.getUsername() + " not found"));
+        List<Role> userRoles = user.getRoles();
+        List<Role> addRoles = new ArrayList<>();
+        copyRolesFromDTO(updateDTO, addRoles);
+        userRoles.addAll(addRoles);
+
+        List<Role> removeRoles = new ArrayList<>();
+        copyRolesFromDTO(updateDTO, addRoles);
+        userRoles.removeAll(removeRoles);
+
+        return user;
+    }
+
+    private void copyRolesFromDTO(UserRoleUpdateDTO updateDTO, List<Role> addRoles) {
+        updateDTO.getAddRoles().forEach(addRole -> addRoles.add(roleRepository.findByName(addRole.getName())));
     }
 }

@@ -3,19 +3,16 @@ package com.k4rnaj1k.bestcafe.controller;
 import com.k4rnaj1k.bestcafe.dto.AuthenticationRequestDTO;
 import com.k4rnaj1k.bestcafe.dto.RegistrationRequestDTO;
 import com.k4rnaj1k.bestcafe.dto.UserResponceDTO;
+import com.k4rnaj1k.bestcafe.dto.UserRoleUpdateDTO;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.security.jwt.JwtTokenProvider;
 import com.k4rnaj1k.bestcafe.security.jwt.JwtUser;
 import com.k4rnaj1k.bestcafe.security.jwt.JwtUserFactory;
 import com.k4rnaj1k.bestcafe.service.UserService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -41,13 +38,12 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<UserResponceDTO> login(@RequestBody AuthenticationRequestDTO requestDTO) {
+    public UserResponceDTO login(@RequestBody AuthenticationRequestDTO requestDTO) {
         String username = requestDTO.getUsername();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDTO.getPassword()));
         User user = userService.findByUsername(username);
         String token = jwtTokenProvider.createToken(username, user.getRoles());
-        UserResponceDTO responce = new UserResponceDTO(username, token);
-        return ResponseEntity.ok(responce);
+        return new UserResponceDTO(username, token);
     }
 }
 
