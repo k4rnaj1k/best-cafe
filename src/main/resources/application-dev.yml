@@ -1,17 +1,16 @@
-
 spring:
   datasource:
     url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
+
   jpa:
-    hibernate:
-      ddl-auto: create
     open-in-view: on
 server:
   error:
     include-exception: true
     include-message: always
+
 jwt:
   token:
     secret: "k4rnaj1ks-cafe"
