@@ -1,15 +1,18 @@
 package com.k4rnaj1k.bestcafe.service;
 
+import com.k4rnaj1k.bestcafe.dto.RegistrationRequestDTO;
 import com.k4rnaj1k.bestcafe.exception.AuthorizationException;
 import com.k4rnaj1k.bestcafe.model.auth.Role;
 import com.k4rnaj1k.bestcafe.model.auth.Status;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
 import com.k4rnaj1k.bestcafe.repository.auth.UserRepository;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -51,5 +54,20 @@ public class UserService {
 
     public void deleteById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public User createUser(RegistrationRequestDTO requestDTO) {
+        if (userRepository.existsByEmail(requestDTO.getEmail()) || userRepository.existsByUsername(requestDTO.getUsername())) {
+            throw new AuthenticationServiceException("user already exists.");
+        }
+        System.out.println(roleRepository.findByName("USER"));
+        System.out.println(roleRepository.findByName("ROLE_USER"));
+//        User user = User.fromRequestDto(requestDTO, List.of(roleRepository.findByName("ROLE_USER")));
+        User user = User.fromRequestDto(requestDTO, List.of(roleRepository.findByName("ROLE_USER")));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Instant now = Instant.now();
+        user.setCreatedAt(now);
+        user.setUpdatedAt(now);
+        return userRepository.save(user);
     }
 }

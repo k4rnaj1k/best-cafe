@@ -1,7 +1,6 @@
 package com.k4rnaj1k.bestcafe.security.jwt;
 
 import com.k4rnaj1k.bestcafe.model.auth.Role;
-import com.k4rnaj1k.bestcafe.security.JwtUserDetailsService;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,7 +57,8 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer_")) {
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            System.out.println(bearerToken.substring(7));
             return bearerToken.substring(7);
         }
         return null;

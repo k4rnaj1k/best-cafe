@@ -22,8 +22,4 @@ public class Ingredient {
     @NotBlank
     @JsonView(Views.PostIngredient.class)
     private String name;
-
-    @ManyToMany(mappedBy = "ingredients")
-    @Hidden
-    private List<Dish> dishes;
 }
