@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SpringDocConfig {
     @Bean
-    public OpenAPI customOpenAPI(){
+    public OpenAPI customOpenAPI() {
         return new OpenAPI().components(new Components().addSecuritySchemes("bearer-key", new SecurityScheme().type(SecurityScheme.Type.HTTP)
-                .scheme("bearer")
-                .bearerFormat("JWT"))).addSecurityItem(new SecurityRequirement().addList("bearer-key"))
+                        .scheme("bearer")
+                        .bearerFormat("JWT"))).addSecurityItem(new SecurityRequirement().addList("bearer-key"))
                 .info(new Info().title("k4rnaj1k's cafe"));
     }
 }

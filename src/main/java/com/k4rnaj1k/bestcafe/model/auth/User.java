@@ -4,7 +4,6 @@ import com.k4rnaj1k.bestcafe.dto.RegistrationRequestDTO;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.List;
 
 @Entity
