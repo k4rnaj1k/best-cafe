@@ -1,4 +1,4 @@
-package com.k4rnaj1k.bestcafe.model.menu;
+package com.k4rnaj1k.bestcafe.model;
 
 import com.k4rnaj1k.bestcafe.dto.menuitem.DishPostDTO;
 import lombok.Data;
@@ -20,8 +20,6 @@ public class Dish {
     @NotBlank
     private String name;
 
-    private Double price;
-
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "dish_ingredients",
@@ -31,15 +29,11 @@ public class Dish {
 
     public static Dish fromPostDTO(DishPostDTO dishPostDTO) {
         Dish dish = new Dish();
-        dish.setName(dishPostDTO.getName());
         List<Ingredient> ingredients = new ArrayList<>();
         dishPostDTO.getIngredients().forEach(id -> {
             Ingredient ingredient = new Ingredient();
-            ingredient.setId(id);
-            ingredients.add(ingredient);
-        });
+            ingredients.add(ingredient);});
         dish.setIngredients(ingredients);
-        dish.setPrice(dishPostDTO.getPrice());
         return dish;
     }
 }

@@ -6,6 +6,6 @@ import java.util.List;
 
 @Data
 public class OrderDTO {
-    private List<DishOrderDTO> dishes;
-    private List<DrinkOrderDTO> drinks;
+    private List<DishItemDTO> dishes;
+    private List<DrinkItemDTO> drinks;
 }
