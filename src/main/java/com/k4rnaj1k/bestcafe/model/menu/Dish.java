@@ -20,6 +20,8 @@ public class Dish {
     @NotBlank
     private String name;
 
+    private Double price;
+
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "dish_ingredients",
@@ -29,11 +31,15 @@ public class Dish {
 
     public static Dish fromPostDTO(DishPostDTO dishPostDTO) {
         Dish dish = new Dish();
+        dish.setName(dishPostDTO.getName());
         List<Ingredient> ingredients = new ArrayList<>();
         dishPostDTO.getIngredients().forEach(id -> {
             Ingredient ingredient = new Ingredient();
-            ingredients.add(ingredient);});
+            ingredient.setId(id);
+            ingredients.add(ingredient);
+        });
         dish.setIngredients(ingredients);
+        dish.setPrice(dishPostDTO.getPrice());
         return dish;
     }
 }
