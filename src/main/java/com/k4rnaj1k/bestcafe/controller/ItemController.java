@@ -22,6 +22,11 @@ public class ItemController {
         this.itemService = itemService;
     }
 
+    @DeleteMapping("ingredients/{id}")
+    public void removeIngredient(@PathVariable("id") Long ingredientId) {
+        itemService.removeIngredientById(ingredientId);
+    }
+
     @PostMapping("ingredients")
     public Ingredient createIngredient(@RequestBody @JsonView(Views.PostIngredient.class) Ingredient ingredient) {
         log.info("{}", ingredient.getName());

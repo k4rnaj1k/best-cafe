@@ -22,10 +22,11 @@
         </tr>
     </table>
 </form>
-<table id="existing" th:each="ingredient: ${ingredients}">
-    <tr>
+<table id="existing">
+    <tr th:each="ingredient: ${ingredients}" th:id="'row-'+${ingredient.id}">
         <td th:text="${ingredient.id}"></td>
         <td th:text="${ingredient.name}"></td>
+        <td><input type="button" value="X" th:onclick="'javascript:deleteIngredient('+${ingredient.id}+');'" ></td>
     </tr>
 </table>
 </body>

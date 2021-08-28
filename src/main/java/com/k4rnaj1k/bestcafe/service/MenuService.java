@@ -58,4 +58,8 @@ public class MenuService {
     public List<Ingredient> getIngredients() {
         return ingredientRepository.findAll();
     }
+
+    public void removeIngredientById(Long ingredientId) {
+        ingredientRepository.deleteById(ingredientId);
+    }
 }

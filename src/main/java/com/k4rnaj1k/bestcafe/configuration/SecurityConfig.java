@@ -42,12 +42,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-ui.html",
                         "/webjars/**", "*").hasRole("ADMIN")
                 .antMatchers("/ingredients").hasRole("COOK")
-                .antMatchers(HttpMethod.PUT, "/orders").hasRole("COOK")
-                .antMatchers(HttpMethod.GET, "/orders").hasRole("COOK")
-                .antMatchers(HttpMethod.GET, "/dishes").hasRole("USER")
+                .antMatchers(HttpMethod.PUT, "api/v1/orders").hasRole("COOK")
+                .antMatchers(HttpMethod.GET, "api/v1/orders").hasRole("COOK")
+                .antMatchers(HttpMethod.GET, "api/v1/dishes").hasRole("USER")
                 .antMatchers(HttpMethod.POST, "/orders").hasRole("USER")
                 .antMatchers(HttpMethod.GET, "/orders").hasRole("USER")
-                .anyRequest().authenticated()
+                .anyRequest().anonymous()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
 
