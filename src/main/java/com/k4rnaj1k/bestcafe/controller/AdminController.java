@@ -20,7 +20,7 @@ public class AdminController {
     }
 
     @PutMapping(Routes.ADMIN)
-    public User updateUser(@RequestBody UserRoleUpdateDTO updateDTO){
+    public User updateUser(@RequestBody UserRoleUpdateDTO updateDTO) {
         return userService.updateUserRoles(updateDTO);
     }
 }
