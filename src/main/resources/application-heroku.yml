@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL}
+  jpa:
+    hibernate:
+      ddl-auto: create
+    open-in-view: on
+server:
+  error:
+    include-exception: true
+    include-message: always
+jwt:
+  token:
+    secret: ${JWT_SECRET}
+    expires: 3600000
