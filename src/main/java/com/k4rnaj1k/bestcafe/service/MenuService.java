@@ -43,11 +43,7 @@ public class MenuService {
 
     public Dish createDish(DishPostDTO dishPostDTO) {
         Dish dish = Dish.fromPostDTO(dishPostDTO);
-        dish.getIngredients().forEach(ingredient -> {
-            Long id = ingredient.getId();
-            ingredient.setName(ingredientRepository.findById(id)
-                    .orElseThrow(() -> CafeException.ingredientDoesntExist(id)).getName());
-        });
+        dish.setIngredients(getDishIngredientsFromIds(dishPostDTO.getIngredients()));
         return dishRepository.save(dish);
     }
 
@@ -90,5 +86,17 @@ public class MenuService {
     public void removeDishById(Long dishId) {
         Dish dish = dishRepository.findById(dishId).orElseThrow(() -> CafeException.dishDoesntExist(dishId));
         dishRepository.delete(dish);
+    }
+
+    public Dish updateDish(Long dishId,DishPostDTO dishPostDTO) {
+        Dish dish = getDishWithId(dishId);
+        dish.setName(dishPostDTO.getName());
+        List<Ingredient> ingredients = getDishIngredientsFromIds(dishPostDTO.getIngredients());
+        dish.setIngredients(ingredients);
+        return dish;
+    }
+
+    private List<Ingredient> getDishIngredientsFromIds(List<Long> ingredientIds) {
+        return ingredientRepository.findAllById(ingredientIds);
     }
 }

@@ -20,29 +20,38 @@ public class ItemController {
         this.itemService = itemService;
     }
 
+    //region Ingredients
     @DeleteMapping(Routes.INGREDIENTS+"/{id}")
     public void removeIngredient(@PathVariable("id") Long ingredientId) {
         itemService.removeIngredientById(ingredientId);
     }
 
-    @DeleteMapping(Routes.DISHES + "/{id}")
-    public void removeDish(@PathVariable("id") Long dishId){
-        itemService.removeDishById(dishId);
+    @GetMapping(Routes.INGREDIENTS)
+    public List<Ingredient> getIngredients() {
+        return itemService.getIngredients();
+    }
+
+    @PutMapping(Routes.INGREDIENTS + "/{id}")
+    public Ingredient updateIngredient(@PathVariable("id") Long ingredientId, @RequestBody IngredientDTO updatedIngredient) {
+        return itemService.updateIngredient(ingredientId, updatedIngredient);
     }
 
     @PostMapping(Routes.INGREDIENTS)
     public Ingredient createIngredient(@RequestBody IngredientDTO ingredientDto) {
         return itemService.createIngredient(ingredientDto);
     }
+    //endregion
 
-    @PostMapping(Routes.DRINKS)
-    public Drink createDrink(@RequestBody DrinkPostDTO drinkPostDTO){
-        return itemService.createDrink(drinkPostDTO);
+
+    //region Dishes
+    @DeleteMapping(Routes.DISHES + "/{id}")
+    public void removeDish(@PathVariable("id") Long dishId){
+        itemService.removeDishById(dishId);
     }
 
-    @GetMapping(Routes.DRINKS)
-    public List<Drink> getDrinks() {
-        return itemService.getDrinks();
+    @PutMapping(Routes.DISHES + "/{id}")
+    public Dish updateDish(@PathVariable("id") Long dishId,@RequestBody DishPostDTO dishPostDTO) {
+        return itemService.updateDish(dishId, dishPostDTO);
     }
 
     @GetMapping(Routes.DISHES)
@@ -60,13 +69,19 @@ public class ItemController {
         return itemService.createDish(dishPostDTO);
     }
 
-    @GetMapping(Routes.INGREDIENTS)
-    public List<Ingredient> getIngredients() {
-        return itemService.getIngredients();
+
+
+    //endregion
+
+    //region Drinks
+    @GetMapping(Routes.DRINKS)
+    public List<Drink> getDrinks() {
+        return itemService.getDrinks();
     }
 
-    @PutMapping(Routes.INGREDIENTS + "/{id}")
-    public Ingredient updateIngredient(@PathVariable("id") Long ingredientId, @RequestBody IngredientDTO updatedIngredient) {
-        return itemService.updateIngredient(ingredientId, updatedIngredient);
+    @PostMapping(Routes.DRINKS)
+    public Drink createDrink(@RequestBody DrinkPostDTO drinkPostDTO){
+        return itemService.createDrink(drinkPostDTO);
     }
+    //endregion
 }
