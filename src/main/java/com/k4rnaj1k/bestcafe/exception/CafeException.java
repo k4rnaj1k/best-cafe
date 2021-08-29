@@ -35,4 +35,12 @@ public final class CafeException {
     public static ResponseStatusException tooManyExcludedIngredientsException() {
         return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Order's item has too many excluded ingredients.");
     }
+
+    public static ResponseStatusException dishWithOneIngredient(Long dish) {
+        return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dish with id " + dish + " includes only the current ingredient.");
+    }
+
+    public static ResponseStatusException orderAcceptedException(Long orderId) {
+        return new ResponseStatusException(HttpStatus.CONFLICT, "Order with id " + orderId + " has already been accepted or ready.");
+    }
 }

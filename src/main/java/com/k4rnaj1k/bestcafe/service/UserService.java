@@ -1,10 +1,10 @@
 package com.k4rnaj1k.bestcafe.service;
 
-import com.k4rnaj1k.bestcafe.controller.UserUpdateDTO;
-import com.k4rnaj1k.bestcafe.dto.DeleteUserRequestDTO;
-import com.k4rnaj1k.bestcafe.dto.RegistrationRequestDTO;
-import com.k4rnaj1k.bestcafe.dto.UserResponceDTO;
-import com.k4rnaj1k.bestcafe.dto.UserRoleUpdateDTO;
+import com.k4rnaj1k.bestcafe.dto.auth.UserUpdateDTO;
+import com.k4rnaj1k.bestcafe.dto.auth.DeleteUserRequestDTO;
+import com.k4rnaj1k.bestcafe.dto.auth.RegistrationRequestDTO;
+import com.k4rnaj1k.bestcafe.dto.auth.UserResponceDTO;
+import com.k4rnaj1k.bestcafe.dto.auth.UserRoleUpdateDTO;
 import com.k4rnaj1k.bestcafe.exception.AuthorizationException;
 import com.k4rnaj1k.bestcafe.model.auth.Role;
 import com.k4rnaj1k.bestcafe.model.auth.User;
@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,9 +59,6 @@ public class UserService {
         }
         User user = User.fromRequestDto(requestDTO, List.of(roleRepository.findByName("ROLE_USER")));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Instant now = Instant.now();
-        user.setCreatedAt(now);
-        user.setUpdatedAt(now);
         return userRepository.save(user);
     }
 
@@ -87,7 +83,6 @@ public class UserService {
 
     public User updateUser(UserUpdateDTO userUpdateDTO, String username) {
         User user = userRepository.getByUsername(username);
-        user.setUpdatedAt(Instant.now());
         if (userUpdateDTO.getFirstName() != null) {
             user.setFirstName(userUpdateDTO.getFirstName());
         }
@@ -110,7 +105,7 @@ public class UserService {
         }
     }
 
-    public UserResponceDTO getResponce(User user) {
+    public UserResponceDTO getToken(User user) {
         return new UserResponceDTO(user.getUsername(), jwtTokenProvider.createToken(user.getUsername(), user.getRoles()));
     }
 }

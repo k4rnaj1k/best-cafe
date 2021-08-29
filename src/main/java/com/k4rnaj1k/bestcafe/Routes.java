@@ -1,4 +1,4 @@
-package com.k4rnaj1k.bestcafe.controller;
+package com.k4rnaj1k.bestcafe;
 
 public class Routes {
     public static final String API_URL = "/api/v1";

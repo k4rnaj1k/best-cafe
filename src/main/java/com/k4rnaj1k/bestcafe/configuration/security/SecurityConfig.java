@@ -1,6 +1,6 @@
-package com.k4rnaj1k.bestcafe.configuration;
+package com.k4rnaj1k.bestcafe.configuration.security;
 
-import com.k4rnaj1k.bestcafe.controller.Routes;
+import com.k4rnaj1k.bestcafe.Routes;
 import com.k4rnaj1k.bestcafe.security.jwt.JwtConfigurer;
 import com.k4rnaj1k.bestcafe.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;

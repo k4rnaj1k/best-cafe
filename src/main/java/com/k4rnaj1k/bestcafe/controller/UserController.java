@@ -1,18 +1,15 @@
 package com.k4rnaj1k.bestcafe.controller;
 
-import com.k4rnaj1k.bestcafe.dto.AuthenticationRequestDTO;
-import com.k4rnaj1k.bestcafe.dto.DeleteUserRequestDTO;
-import com.k4rnaj1k.bestcafe.dto.RegistrationRequestDTO;
-import com.k4rnaj1k.bestcafe.dto.UserResponceDTO;
+import com.k4rnaj1k.bestcafe.Routes;
+import com.k4rnaj1k.bestcafe.dto.auth.UserUpdateDTO;
+import com.k4rnaj1k.bestcafe.dto.auth.AuthenticationRequestDTO;
+import com.k4rnaj1k.bestcafe.dto.auth.DeleteUserRequestDTO;
+import com.k4rnaj1k.bestcafe.dto.auth.RegistrationRequestDTO;
+import com.k4rnaj1k.bestcafe.dto.auth.UserResponceDTO;
 import com.k4rnaj1k.bestcafe.model.auth.User;
-import com.k4rnaj1k.bestcafe.security.jwt.JwtTokenProvider;
-import com.k4rnaj1k.bestcafe.security.jwt.JwtUser;
-import com.k4rnaj1k.bestcafe.security.jwt.JwtUserFactory;
 import com.k4rnaj1k.bestcafe.service.UserService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -29,18 +26,18 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("register")
     public UserResponceDTO register(@RequestBody RegistrationRequestDTO requestDTO) {
         var user = userService.createUser(requestDTO);
-        return userService.getResponce(user);
+        return userService.getToken(user);
     }
 
-    @GetMapping
+    @PostMapping("login")
     public UserResponceDTO login(@RequestBody AuthenticationRequestDTO requestDTO) {
         String username = requestDTO.getUsername();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDTO.getPassword()));
         User user = userService.findByUsername(username);
-        return userService.getResponce(user);
+        return userService.getToken(user);
     }
 
     @PutMapping

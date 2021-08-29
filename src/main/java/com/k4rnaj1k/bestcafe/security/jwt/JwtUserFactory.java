@@ -6,6 +6,7 @@ import com.k4rnaj1k.bestcafe.model.auth.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,7 @@ public final class JwtUserFactory {
     }
 
     public static JwtUser create(User user) {
-        return new JwtUser(user.getStatus().equals(Status.ACTIVE), user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(), user.getPassword(), user.getEmail(), user.getUpdatedAt(), fromRoles(user.getRoles()));
+        return new JwtUser(true, user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(), user.getPassword(), user.getEmail(), Instant.now(), fromRoles(user.getRoles()));
     }
 
     private static List<GrantedAuthority> fromRoles(List<Role> roles) {
