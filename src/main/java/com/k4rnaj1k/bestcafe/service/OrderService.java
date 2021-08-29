@@ -50,7 +50,6 @@ public class OrderService {
 
         order.setDishes(dishItemRepository.saveAll(order.getDishes()));
         order.setDrinks(drinkItemRepository.saveAll(order.getDrinks()));
-        order.setPrice(countPrice(order));
         return orderRepository.save(order);
     }
 
@@ -63,26 +62,15 @@ public class OrderService {
         order.getDishes().forEach(dishOrder -> {
             if (dishOrder.getDish().getIngredients().size() <= dishOrder.getExcluded().size())
                 throw CafeException.tooManyExcludedIngredientsException();
+            if(!dishOrder.getDish().getIngredients().containsAll(dishOrder.getExcluded())){
+                throw CafeException.excludedIngredientsException();
+            }
         });
         order.getDishes().forEach(dishOrder -> dishOrder.getExcluded().forEach(ingredient -> {
                     Long id = ingredient.getId();
                     ingredient.setName(ingredientRepository.findById(id).orElseThrow(() -> CafeException.ingredientDoesntExist(id)).getName());
                 }
         ));
-    }
-
-    private Double countPrice(Order order) {
-        double price = 0;
-        for (DishOrder dish :
-                order.getDishes()) {
-            price += dish.getDish().getPrice();
-        }
-
-        for (DrinkOrder drink :
-                order.getDrinks()) {
-            price += drink.getDrink().getPrice();
-        }
-        return price;
     }
 
     public List<Order> getOrders(User user) {
@@ -109,9 +97,7 @@ public class OrderService {
 
     public Order updateOrder(OrderDTO orderDTO, Long orderId, User user) {
         Order order = getOrderById(orderId);
-        if (order.getUser() != user && !user.getRoles().contains(roleRepository.findByName("ROLE_ADMIN"))) {
-            throw new AuthorizationServiceException("Access to order " + orderId + " denied.");
-        }
+        checkOrderAccess(orderId, user, order);
         if (order.getStatus().getValue() > 1) {
             throw CafeException.orderAcceptedException(orderId);
         }
@@ -119,7 +105,6 @@ public class OrderService {
         Order update = Order.fromDTO(orderDTO);
         update.setId(order.getId());
         loadOrderFields(update);
-        update.setPrice(countPrice(update));
         update.setUser(user);
         update.setCreatedAt(order.getCreatedAt());
         update.setUpdatedAt(Instant.now());
@@ -128,5 +113,11 @@ public class OrderService {
 
         BeanUtils.copyProperties(update, order);
         return orderRepository.save(order);
+    }
+
+    private void checkOrderAccess(Long orderId, User user, Order order) {
+        if (order.getUser() != user && !user.getRoles().contains(roleRepository.findByName("ROLE_ADMIN"))) {
+            throw new AuthorizationServiceException("Access to order " + orderId + " denied.");
+        }
     }
 }
