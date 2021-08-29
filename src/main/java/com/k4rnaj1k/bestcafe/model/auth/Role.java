@@ -2,15 +2,17 @@ package com.k4rnaj1k.bestcafe.model.auth;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "roles")
 @Data
-public class Role extends BaseEntity {
+public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String name;
 
     @ManyToMany(mappedBy = "roles")

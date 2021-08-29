@@ -1,7 +1,6 @@
 spring:
   datasource:
     url: ${DATABASE_URL}
-    open-in-view: on
   jpa:
     open-in-view: on
 server:

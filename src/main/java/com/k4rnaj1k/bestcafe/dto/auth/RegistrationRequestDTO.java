@@ -1,4 +1,4 @@
-package com.k4rnaj1k.bestcafe.dto;
+package com.k4rnaj1k.bestcafe.dto.auth;
 
 import lombok.Data;
 

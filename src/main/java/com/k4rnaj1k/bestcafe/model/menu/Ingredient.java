@@ -1,4 +1,4 @@
-package com.k4rnaj1k.bestcafe.model;
+package com.k4rnaj1k.bestcafe.model.menu;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.k4rnaj1k.bestcafe.dto.menuitem.IngredientDTO;

@@ -1,14 +1,15 @@
 package com.k4rnaj1k.bestcafe.service;
 
 import com.k4rnaj1k.bestcafe.dto.menuitem.DishPostDTO;
+import com.k4rnaj1k.bestcafe.dto.menuitem.DrinkPostDTO;
 import com.k4rnaj1k.bestcafe.dto.menuitem.IngredientDTO;
 import com.k4rnaj1k.bestcafe.exception.CafeException;
-import com.k4rnaj1k.bestcafe.model.Dish;
-import com.k4rnaj1k.bestcafe.model.Drink;
-import com.k4rnaj1k.bestcafe.model.Ingredient;
-import com.k4rnaj1k.bestcafe.repository.DishRepository;
-import com.k4rnaj1k.bestcafe.repository.DrinkRepository;
-import com.k4rnaj1k.bestcafe.repository.IngredientRepository;
+import com.k4rnaj1k.bestcafe.model.menu.Dish;
+import com.k4rnaj1k.bestcafe.model.menu.Drink;
+import com.k4rnaj1k.bestcafe.model.menu.Ingredient;
+import com.k4rnaj1k.bestcafe.repository.menu.DishRepository;
+import com.k4rnaj1k.bestcafe.repository.menu.DrinkRepository;
+import com.k4rnaj1k.bestcafe.repository.menu.IngredientRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -64,6 +65,30 @@ public class MenuService {
     }
 
     public void removeIngredientById(Long ingredientId) {
-        ingredientRepository.deleteById(ingredientId);
+        Ingredient ingredient = ingredientRepository.findById(ingredientId).orElseThrow(() -> CafeException.ingredientDoesntExist(ingredientId));
+        if (ingredient.getDishes().size() == 0) {
+            ingredientRepository.deleteById(ingredientId);
+        } else {
+            ingredient.getDishes().forEach(dish -> {
+                if (dish.getIngredients().size() == 1)
+                    throw CafeException.dishWithOneIngredient(dish.getId());
+            });
+            ingredientRepository.delete(ingredient);
+        }
+    }
+
+    public Dish getDishWithId(Long dishId) {
+        return dishRepository.findById(dishId)
+                .orElseThrow(() -> CafeException.dishDoesntExist(dishId));
+    }
+
+    public Drink createDrink(DrinkPostDTO drinkPostDTO) {
+        Drink drink = Drink.fromDrinkDTO(drinkPostDTO);
+        return drinkRepository.save(drink);
+    }
+
+    public void removeDishById(Long dishId) {
+        Dish dish = dishRepository.findById(dishId).orElseThrow(() -> CafeException.dishDoesntExist(dishId));
+        dishRepository.delete(dish);
     }
 }
