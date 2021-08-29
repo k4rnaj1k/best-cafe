@@ -43,8 +43,4 @@ public final class CafeException {
     public static ResponseStatusException orderAcceptedException(Long orderId) {
         return new ResponseStatusException(HttpStatus.CONFLICT, "Order with id " + orderId + " has already been accepted or ready.");
     }
-
-    public static ResponseStatusException excludedIngredientsException() {
-        return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Excluded ingredient that is not present in the dish.");
-    }
 }

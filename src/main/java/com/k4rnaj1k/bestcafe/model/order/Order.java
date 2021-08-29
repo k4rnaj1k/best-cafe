@@ -1,7 +1,6 @@
 package com.k4rnaj1k.bestcafe.model.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.k4rnaj1k.bestcafe.dto.order.OrderDTO;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import lombok.Data;
@@ -35,6 +34,8 @@ public class Order {
     @JsonIgnore
     private User user;
 
+    private Double price;
+
     public Order() {
         this.status = OrderStatus.SENT;
         Instant now = Instant.now();
@@ -45,14 +46,14 @@ public class Order {
     public static Order fromDTO(OrderDTO orderDTO) {
         Order order = new Order();
         List<DishOrder> dishes = new ArrayList<>();
-        orderDTO.getDishes().forEach(dishOrderDTO -> {
-            DishOrder dishOrder = DishOrder.fromDTO(dishOrderDTO);
+        orderDTO.getDishes().forEach(dishItemDTO -> {
+            DishOrder dishOrder = DishOrder.fromDTO(dishItemDTO);
             dishes.add(dishOrder);
         });
         order.setDishes(dishes);
         List<DrinkOrder> drinks = new ArrayList<>();
-        orderDTO.getDrinks().forEach(drinkOrderDTO -> {
-            DrinkOrder drinkOrder = DrinkOrder.fromDTO(drinkOrderDTO);
+        orderDTO.getDrinks().forEach(drinkItemDTO -> {
+            DrinkOrder drinkOrder = DrinkOrder.fromDTO(drinkItemDTO);
             drinks.add(drinkOrder);
         });
         order.setDrinks(drinks);
@@ -72,21 +73,6 @@ public class Order {
         OrderStatus(int value) {
             this.value = value;
         }
-    }
-
-    @JsonProperty("price")
-    public Double getPrice(){
-        Double price = 0d;
-        for (DishOrder dish :
-                dishes) {
-            price += dish.getDish().getPrice();
-        }
-
-        for (DrinkOrder drink :
-                drinks) {
-            price += drink.getDrink().getPrice();
-        }
-        return price;
     }
 
     @OneToMany

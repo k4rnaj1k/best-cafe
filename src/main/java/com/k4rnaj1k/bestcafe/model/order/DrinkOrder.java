@@ -14,7 +14,7 @@ public class DrinkOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private Drink drink;
 
     private Long amount;
