@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping(Routes.ORDERS)
 public class OrderController {
     private final OrderService orderService;
 
@@ -16,17 +16,17 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PostMapping("orders")
+    @PostMapping
     public Order createOrder(@RequestBody OrderDTO order) {
         return orderService.createOrder(order);
     }
 
-    @GetMapping("orders")
+    @GetMapping
     public List<Order> getOrders() {
         return orderService.getOrders();
     }
 
-    @PutMapping("orders/statuses/{id}")
+    @PutMapping("/{id}")
     public Order updateOrderStatus(@PathVariable("id") Long orderId, Order.OrderStatus orderStatus) {
         return orderService.updateOrderStatus(orderId, orderStatus);
     }

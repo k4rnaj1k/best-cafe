@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping(Routes.API_URL)
 @Slf4j
 public class ItemController {
     private final MenuService itemService;
