@@ -2,10 +2,6 @@ language: java
 jdk: openjdk16
 sudo: true
 services: postgresql
-env:
-  - DB_URL=jdbc:postgresql:travis_ci_test
-  - DB_USER=postgres
-  - DB_PASSWORD=
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
 before_install:
