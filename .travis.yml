@@ -1,6 +1,8 @@
 language: java
 jdk: openjdk16
 sudo: true
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
 before_install:
   - chmod +x mvnw
 deploy:
