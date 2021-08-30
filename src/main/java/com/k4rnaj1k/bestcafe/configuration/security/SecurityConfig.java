@@ -41,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, Routes.DISHES).hasRole("COOK")
                 .antMatchers(HttpMethod.PUT, Routes.ORDERS_STATUS).hasRole("COOK")
                 .antMatchers(Routes.ADMIN).hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, Routes.USERS).hasRole("USER")
                 .antMatchers(Routes.USERS).anonymous()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

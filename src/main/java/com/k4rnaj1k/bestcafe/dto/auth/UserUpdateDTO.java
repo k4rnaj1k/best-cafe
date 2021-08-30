@@ -8,4 +8,5 @@ public class UserUpdateDTO {
     private String lastName;
     private String password;
     private String newPassword;
+    private String email;
 }

@@ -5,7 +5,8 @@ import com.k4rnaj1k.bestcafe.dto.auth.UserUpdateDTO;
 import com.k4rnaj1k.bestcafe.dto.auth.AuthenticationRequestDTO;
 import com.k4rnaj1k.bestcafe.dto.auth.DeleteUserRequestDTO;
 import com.k4rnaj1k.bestcafe.dto.auth.RegistrationRequestDTO;
-import com.k4rnaj1k.bestcafe.dto.auth.UserResponceDTO;
+import com.k4rnaj1k.bestcafe.dto.auth.UserTokenDTO;
+import com.k4rnaj1k.bestcafe.dto.user.UserResponceDTO;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.service.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,13 +28,13 @@ public class UserController {
     }
 
     @PostMapping("register")
-    public UserResponceDTO register(@RequestBody RegistrationRequestDTO requestDTO) {
+    public UserTokenDTO register(@RequestBody RegistrationRequestDTO requestDTO) {
         var user = userService.createUser(requestDTO);
         return userService.getToken(user);
     }
 
     @PostMapping("login")
-    public UserResponceDTO login(@RequestBody AuthenticationRequestDTO requestDTO) {
+    public UserTokenDTO login(@RequestBody AuthenticationRequestDTO requestDTO) {
         String username = requestDTO.getUsername();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDTO.getPassword()));
         User user = userService.findByUsername(username);
@@ -41,8 +42,9 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUserDetails(@RequestBody UserUpdateDTO userUpdateDTO, Principal principal){
-        return userService.updateUser(userUpdateDTO, principal.getName());
+    public UserResponceDTO updateUserDetails(@RequestBody UserUpdateDTO userUpdateDTO, Principal principal){
+        User updatedUser = userService.updateUser(userUpdateDTO, principal.getName());
+        return UserResponceDTO.fromUser(updatedUser);
     }
 
     @DeleteMapping

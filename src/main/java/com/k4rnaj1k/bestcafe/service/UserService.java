@@ -3,7 +3,7 @@ package com.k4rnaj1k.bestcafe.service;
 import com.k4rnaj1k.bestcafe.dto.auth.UserUpdateDTO;
 import com.k4rnaj1k.bestcafe.dto.auth.DeleteUserRequestDTO;
 import com.k4rnaj1k.bestcafe.dto.auth.RegistrationRequestDTO;
-import com.k4rnaj1k.bestcafe.dto.auth.UserResponceDTO;
+import com.k4rnaj1k.bestcafe.dto.auth.UserTokenDTO;
 import com.k4rnaj1k.bestcafe.dto.auth.UserRoleUpdateDTO;
 import com.k4rnaj1k.bestcafe.exception.AuthorizationException;
 import com.k4rnaj1k.bestcafe.model.auth.Role;
@@ -105,7 +105,7 @@ public class UserService {
         }
     }
 
-    public UserResponceDTO getToken(User user) {
-        return new UserResponceDTO(user.getUsername(), jwtTokenProvider.createToken(user.getUsername(), user.getRoles()));
+    public UserTokenDTO getToken(User user) {
+        return new UserTokenDTO(user.getUsername(), jwtTokenProvider.createToken(user.getUsername(), user.getRoles()));
     }
 }
