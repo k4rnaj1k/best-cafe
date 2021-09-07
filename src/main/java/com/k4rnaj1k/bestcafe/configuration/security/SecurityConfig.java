@@ -35,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/api/v1/users/register").anonymous()
                 .antMatchers(HttpMethod.GET, Routes.DISHES, Routes.DRINKS).hasRole("USER")
                 .antMatchers(HttpMethod.POST, Routes.ORDERS).hasRole("USER")
                 .antMatchers(Routes.INGREDIENTS, Routes.ORDERS).hasRole("COOK")
@@ -43,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(Routes.ADMIN).hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, Routes.USERS).hasRole("USER")
                 .antMatchers(Routes.USERS).anonymous()
+                .antMatchers("/api/v1/users/admin/**").hasRole("ADMIN")
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
 
