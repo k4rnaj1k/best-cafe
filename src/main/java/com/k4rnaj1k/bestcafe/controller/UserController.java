@@ -9,6 +9,8 @@ import com.k4rnaj1k.bestcafe.dto.auth.UserTokenDTO;
 import com.k4rnaj1k.bestcafe.dto.user.UserResponceDTO;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.service.UserService;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +37,8 @@ public class UserController {
 
     @PostMapping("login")
     public UserTokenDTO login(@RequestBody AuthenticationRequestDTO requestDTO) {
-        String username = requestDTO.getUsername();
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDTO.getPassword()));
+        String username = requestDTO.username();
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDTO.password()));
         User user = userService.findByUsername(username);
         return userService.getToken(user);
     }

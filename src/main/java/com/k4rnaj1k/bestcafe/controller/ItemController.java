@@ -8,8 +8,10 @@ import com.k4rnaj1k.bestcafe.model.menu.Dish;
 import com.k4rnaj1k.bestcafe.model.menu.Drink;
 import com.k4rnaj1k.bestcafe.model.menu.Ingredient;
 import com.k4rnaj1k.bestcafe.service.MenuService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -80,7 +82,7 @@ public class ItemController {
     }
 
     @PostMapping(Routes.DRINKS)
-    public Drink createDrink(@RequestBody DrinkPostDTO drinkPostDTO){
+    public Drink createDrink(@RequestBody @Valid DrinkPostDTO drinkPostDTO){
         return itemService.createDrink(drinkPostDTO);
     }
     //endregion
