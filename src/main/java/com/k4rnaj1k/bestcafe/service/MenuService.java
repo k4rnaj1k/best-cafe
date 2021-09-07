@@ -86,6 +86,9 @@ public class MenuService {
     }
 
     public Drink createDrink(DrinkPostDTO drinkPostDTO) {
+        if(drinkRepository.existsByName(drinkPostDTO.getName())){
+            throw CafeException.drinkExistsException(drinkPostDTO.getName());
+        }
         Drink drink = Drink.fromDrinkDTO(drinkPostDTO);
         return drinkRepository.save(drink);
     }
