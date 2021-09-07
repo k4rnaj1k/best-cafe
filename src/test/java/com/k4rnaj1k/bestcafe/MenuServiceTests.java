@@ -14,7 +14,7 @@ import java.util.List;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class MenuServiceTests {
+class MenuServiceTests{
 
     @Autowired
     private MenuService menuService;
