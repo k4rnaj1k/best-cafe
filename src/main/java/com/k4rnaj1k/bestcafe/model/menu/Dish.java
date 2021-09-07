@@ -1,19 +1,22 @@
 package com.k4rnaj1k.bestcafe.model.menu;
 
 import com.k4rnaj1k.bestcafe.dto.menuitem.DishPostDTO;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "dishes")
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 public class Dish {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,5 +48,19 @@ public class Dish {
         dish.setIngredients(ingredients);
         dish.setPrice(dishPostDTO.price());
         return dish;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Dish dish = (Dish) o;
+
+        return Objects.equals(id, dish.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 161829241;
     }
 }

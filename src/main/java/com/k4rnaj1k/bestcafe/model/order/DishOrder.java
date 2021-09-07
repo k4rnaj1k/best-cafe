@@ -3,15 +3,20 @@ package com.k4rnaj1k.bestcafe.model.order;
 import com.k4rnaj1k.bestcafe.dto.order.DishOrderDTO;
 import com.k4rnaj1k.bestcafe.model.menu.Dish;
 import com.k4rnaj1k.bestcafe.model.menu.Ingredient;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "dish_orders")
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 public class DishOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +29,7 @@ public class DishOrder {
 
     @ManyToMany
     @JoinTable(name = "excluded_dish_ingredients", joinColumns = @JoinColumn(name = "dish_order_id"), inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
+    @ToString.Exclude
     private List<Ingredient> excluded = new ArrayList<>();
 
     public static DishOrder fromDTO(DishOrderDTO dishOrderDTO) {
@@ -44,5 +50,19 @@ public class DishOrder {
         }
         dishOrder.setExcluded(excluded);
         return dishOrder;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        DishOrder dishOrder = (DishOrder) o;
+
+        return Objects.equals(id, dishOrder.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 1003561179;
     }
 }

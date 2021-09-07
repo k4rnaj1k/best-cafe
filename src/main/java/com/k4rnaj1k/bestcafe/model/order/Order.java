@@ -4,14 +4,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.k4rnaj1k.bestcafe.dto.order.OrderDTO;
 import com.k4rnaj1k.bestcafe.model.auth.User;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -20,6 +24,7 @@ public class Order {
     private Long id;
 
     @OneToMany
+    @ToString.Exclude
 //    @JsonIgnoreProperties("order")
     private List<DishOrder> dishes = new ArrayList<>();
 
@@ -90,5 +95,20 @@ public class Order {
     }
 
     @OneToMany
+    @ToString.Exclude
     private List<DrinkOrder> drinks = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Order order = (Order) o;
+
+        return Objects.equals(id, order.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 737800560;
+    }
 }

@@ -9,6 +9,7 @@ import com.k4rnaj1k.bestcafe.dto.order.DishOrderDTO;
 import com.k4rnaj1k.bestcafe.dto.order.OrderDTO;
 import com.k4rnaj1k.bestcafe.model.auth.Role;
 import com.k4rnaj1k.bestcafe.model.auth.User;
+import com.k4rnaj1k.bestcafe.model.order.DishOrder;
 import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
 import com.k4rnaj1k.bestcafe.service.MenuService;
 import com.k4rnaj1k.bestcafe.service.OrderService;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class OrderServiceTests {
 
     @Autowired
@@ -37,11 +39,12 @@ public class OrderServiceTests {
     @Autowired
     private RoleRepository roleRepository;
 
-    private final User admin;
-    private final User user1;
-    private final User user2;
+    private User admin;
+    private User user1;
+    private User user2;
 
-    public OrderServiceTests() {
+    @BeforeAll
+    public void setUp() {
         this.setUpRoles();
         this.admin = createAdmin();
         this.user1 = createUser("user", "user@email.com", "user");
@@ -56,7 +59,11 @@ public class OrderServiceTests {
 
         Role adminRole = new Role();
         adminRole.setName("ROLE_ADMIN");
-        roleRepository.saveAll(List.of(adminRole, userRole));
+
+        Role cookRole = new Role();
+        cookRole.setName("ROLE_COOK");
+
+        roleRepository.saveAll(List.of(adminRole, userRole, cookRole));
     }
 
     private User createAdmin() {
@@ -78,9 +85,11 @@ public class OrderServiceTests {
     @Order(1)
     public void createOrder() {
         OrderDTO orderDTO = new OrderDTO();
-        orderDTO.setDishes(List.of(new DishOrderDTO(1L, 1L, Collections.emptyList())));
-        orderDTO.setDishes(Collections.emptyList());
+        DishOrderDTO dishOrderDTO=new DishOrderDTO(1L, 1L, Collections.emptyList());
+        orderDTO.setDishes(List.of(dishOrderDTO));
+        orderDTO.setDrinks(Collections.emptyList());
         orderService.createOrder(orderDTO, user1);
+        System.out.println(user1.getRoles());
         Assertions.assertEquals(1, orderService.getOrders(user1).size());
         Assertions.assertEquals(0, orderService.getOrders(user2).size());
         Assertions.assertEquals(1, orderService.getOrders(admin).size());

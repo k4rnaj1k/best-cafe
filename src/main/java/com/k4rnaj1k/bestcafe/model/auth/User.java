@@ -3,13 +3,18 @@ package com.k4rnaj1k.bestcafe.model.auth;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.k4rnaj1k.bestcafe.dto.auth.RegistrationRequestDTO;
 import com.k4rnaj1k.bestcafe.model.order.Order;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Table(name = "users")
 public class User{
     @Id
@@ -35,6 +40,7 @@ public class User{
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
     private List<Order> orders;
 
     public static User fromRequestDto(RegistrationRequestDTO requestDTO, List<Role> roles) {
@@ -48,5 +54,19 @@ public class User{
 
     public void addRole(List<Role> roles) {
         this.roles.addAll(roles);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 562048007;
     }
 }
