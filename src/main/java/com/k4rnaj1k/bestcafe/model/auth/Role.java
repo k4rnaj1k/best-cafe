@@ -19,4 +19,8 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     @JsonIgnore
     private List<User> users;
+
+    public void addUser(User user) {
+        this.users.add(user);
+    }
 }

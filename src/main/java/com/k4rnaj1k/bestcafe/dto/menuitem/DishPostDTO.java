@@ -2,11 +2,16 @@ package com.k4rnaj1k.bestcafe.dto.menuitem;
 
 import lombok.Data;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Data
-public class DishPostDTO {
-    private String name;
-    private List<Long> ingredients;
-    private Double price;
+public record DishPostDTO (
+    @NotBlank
+     String name,
+    @NotNull
+     List<Long> ingredients,
+    @DecimalMin("1")
+     Double price){
 }

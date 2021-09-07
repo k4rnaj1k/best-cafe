@@ -42,17 +42,20 @@ public class MenuService {
     }
 
     public Dish createDish(DishPostDTO dishPostDTO) {
+        if(dishRepository.existsByName(dishPostDTO.name())){
+            throw CafeException.dishAlreadyExists(dishPostDTO.name());
+        }
         Dish dish = Dish.fromPostDTO(dishPostDTO);
-        dish.setIngredients(getDishIngredientsFromIds(dishPostDTO.getIngredients()));
+        dish.setIngredients(getDishIngredientsFromIds(dishPostDTO.ingredients()));
         return dishRepository.save(dish);
     }
 
     public Ingredient updateIngredient(Long ingredientId, IngredientDTO ingredientDTO) {
-        if (ingredientRepository.existsByName(ingredientDTO.getName())) {
-            throw CafeException.ingredientAlreadyExists(ingredientDTO.getName());
+        if (ingredientRepository.existsByName(ingredientDTO.name())) {
+            throw CafeException.ingredientAlreadyExists(ingredientDTO.name());
         }
-        Ingredient ingredientFromDb = ingredientRepository.findById(ingredientId).orElseThrow(() -> CafeException.ingredientDoesntExist(ingredientId));
-        ingredientFromDb.setName(ingredientDTO.getName());
+        Ingredient ingredientFromDb = getIngredient(ingredientId);
+        ingredientFromDb.setName(ingredientDTO.name());
         return ingredientRepository.save(ingredientFromDb);
     }
 
@@ -61,7 +64,7 @@ public class MenuService {
     }
 
     public void removeIngredientById(Long ingredientId) {
-        Ingredient ingredient = ingredientRepository.findById(ingredientId).orElseThrow(() -> CafeException.ingredientDoesntExist(ingredientId));
+        Ingredient ingredient = getIngredient(ingredientId);
         if (ingredient.getDishes().size() == 0) {
             ingredientRepository.deleteById(ingredientId);
         } else {
@@ -71,6 +74,10 @@ public class MenuService {
             });
             ingredientRepository.delete(ingredient);
         }
+    }
+
+    private Ingredient getIngredient(Long ingredientId) {
+        return ingredientRepository.findById(ingredientId).orElseThrow(() -> CafeException.ingredientDoesntExist(ingredientId));
     }
 
     public Dish getDishWithId(Long dishId) {
@@ -90,13 +97,18 @@ public class MenuService {
 
     public Dish updateDish(Long dishId,DishPostDTO dishPostDTO) {
         Dish dish = getDishWithId(dishId);
-        dish.setName(dishPostDTO.getName());
-        List<Ingredient> ingredients = getDishIngredientsFromIds(dishPostDTO.getIngredients());
+        dish.setName(dishPostDTO.name());
+        List<Ingredient> ingredients = getDishIngredientsFromIds(dishPostDTO.ingredients());
         dish.setIngredients(ingredients);
         return dish;
     }
 
     private List<Ingredient> getDishIngredientsFromIds(List<Long> ingredientIds) {
         return ingredientRepository.findAllById(ingredientIds);
+    }
+
+    public IngredientDTO getIngredientById(Long id) {
+        Ingredient ingredient = getIngredient(id);
+        return new IngredientDTO(ingredient.getName());
     }
 }

@@ -11,4 +11,8 @@ public class UserTokenDTO {
         this.username = username;
         this.token = token;
     }
+
+    public UserTokenDTO() {
+
+    }
 }

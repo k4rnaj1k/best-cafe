@@ -1,14 +1,20 @@
 package com.k4rnaj1k.bestcafe.dto.order;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import com.k4rnaj1k.bestcafe.model.menu.Dish;
+import org.springframework.data.annotation.Reference;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
-@Data
-public class DishOrderDTO {
-    @JsonProperty(value = "dish_id", index = 0)
-    private Long dishId;
-    private Long amount;
-    private List<Long> excludedIngredients;
+public record DishOrderDTO(
+        @JsonProperty(value = "dish_id", index = 0)
+        @Reference(Dish.class)
+        Long dishId,
+
+        @Min(1L)
+        Long amount,
+
+        @Reference(Integer.class)
+        List<Long> excludedIngredients) {
 }

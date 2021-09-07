@@ -39,10 +39,14 @@ public class User{
 
     public static User fromRequestDto(RegistrationRequestDTO requestDTO, List<Role> roles) {
         User result = new User();
-        result.setUsername(requestDTO.getUsername());
+        result.setUsername(requestDTO.username());
         result.setRoles(roles);
-        result.setPassword(requestDTO.getPassword());
-        result.setEmail(requestDTO.getEmail());
+        result.setPassword(requestDTO.password());
+        result.setEmail(requestDTO.email());
         return result;
+    }
+
+    public void addRole(List<Role> roles) {
+        this.roles.addAll(roles);
     }
 }

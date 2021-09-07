@@ -20,13 +20,13 @@ public class Ingredient {
     @NotBlank
     private String name;
 
-    @ManyToMany(mappedBy = "ingredients")
+    @ManyToMany(mappedBy = "ingredients", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Dish> dishes;
 
     public static Ingredient fromDTO(IngredientDTO ingredientDto) {
         Ingredient ingredient = new Ingredient();
-        ingredient.setName(ingredientDto.getName());
+        ingredient.setName(ingredientDto.name());
         return ingredient;
     }
 }

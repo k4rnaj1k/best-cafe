@@ -4,8 +4,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
-public class IngredientDTO {
+public record IngredientDTO (
     @NotBlank
-    private String name;
+    String name){
 }

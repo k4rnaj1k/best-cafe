@@ -4,6 +4,9 @@ import com.k4rnaj1k.bestcafe.dto.menuitem.DishPostDTO;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,7 @@ public class Dish {
     @NotBlank
     private String name;
 
+    @DecimalMin("1")
     private Double price;
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
@@ -31,15 +35,15 @@ public class Dish {
 
     public static Dish fromPostDTO(DishPostDTO dishPostDTO) {
         Dish dish = new Dish();
-        dish.setName(dishPostDTO.getName());
+        dish.setName(dishPostDTO.name());
         List<Ingredient> ingredients = new ArrayList<>();
-        dishPostDTO.getIngredients().forEach(id -> {
+        dishPostDTO.ingredients().forEach(id -> {
             Ingredient ingredient = new Ingredient();
             ingredient.setId(id);
             ingredients.add(ingredient);
         });
         dish.setIngredients(ingredients);
-        dish.setPrice(dishPostDTO.getPrice());
+        dish.setPrice(dishPostDTO.price());
         return dish;
     }
 }

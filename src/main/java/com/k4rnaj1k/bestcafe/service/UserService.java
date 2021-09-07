@@ -54,7 +54,7 @@ public class UserService {
     }
 
     public User createUser(RegistrationRequestDTO requestDTO) {
-        if (userRepository.existsByEmail(requestDTO.getEmail()) || userRepository.existsByUsername(requestDTO.getUsername())) {
+        if (userRepository.existsByEmail(requestDTO.email()) || userRepository.existsByUsername(requestDTO.username())) {
             throw new AuthenticationServiceException("user already exists.");
         }
         User user = User.fromRequestDto(requestDTO, List.of(roleRepository.findByName("ROLE_USER")));
@@ -72,13 +72,14 @@ public class UserService {
 
         List<Role> removeRoles = new ArrayList<>();
         copyRolesFromDTO(updateDTO, removeRoles);
-        userRoles.removeAll(removeRoles);
 
-        return user;
+        user.setRoles(userRoles);
+        user.getRoles().forEach(role-> System.out.println(role.getName()));
+        return userRepository.save(user);
     }
 
     private void copyRolesFromDTO(UserRoleUpdateDTO updateDTO, List<Role> copyTo) {
-        updateDTO.getAddRoles().forEach(addRole -> copyTo.add(roleRepository.findByName(addRole.getName())));
+        updateDTO.getAddRoles().forEach(addRole -> copyTo.add(roleRepository.findByName(addRole.name())));
     }
 
     public User updateUser(UserUpdateDTO userUpdateDTO, String username) {

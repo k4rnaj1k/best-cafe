@@ -29,14 +29,14 @@ public class DishOrder {
     public static DishOrder fromDTO(DishOrderDTO dishOrderDTO) {
         DishOrder dishOrder = new DishOrder();
         Dish dish = new Dish();
-        dish.setId(dishOrderDTO.getDishId());
+        dish.setId(dishOrderDTO.dishId());
         dishOrder.setDish(dish);
 
-        dishOrder.setAmount(dishOrderDTO.getAmount());
+        dishOrder.setAmount(dishOrderDTO.amount());
 
         List<Ingredient> excluded = new ArrayList<>();
-        if (dishOrderDTO.getExcludedIngredients() != null) {
-            dishOrderDTO.getExcludedIngredients().forEach(ingredientId -> {
+        if (dishOrderDTO.excludedIngredients() != null) {
+            dishOrderDTO.excludedIngredients().forEach(ingredientId -> {
                 Ingredient ingredient = new Ingredient();
                 ingredient.setId(ingredientId);
                 excluded.add(ingredient);
