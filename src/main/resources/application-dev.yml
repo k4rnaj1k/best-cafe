@@ -5,11 +5,12 @@ spring:
     password: ${DB_PASSWORD}
   jpa:
     open-in-view: on
+    hibernate:
+      ddl-auto: validate
 server:
   error:
     include-exception: true
     include-message: always
-
 jwt:
   token:
     secret: "k4rnaj1ks-cafe"
