@@ -20,7 +20,7 @@ import java.util.List;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class COrderServiceTests {
+public class OrderServiceTests {
 
     private final OrderService orderService;
     private final MenuService menuService;
@@ -30,7 +30,7 @@ public class COrderServiceTests {
     private final User user2;
 
     @Autowired
-    public COrderServiceTests(OrderService orderService, MenuService menuService, UserService userService) {
+    public OrderServiceTests(OrderService orderService, MenuService menuService, UserService userService) {
         this.orderService = orderService;
         this.menuService = menuService;
         this.admin = userService.findByUsername("admin");

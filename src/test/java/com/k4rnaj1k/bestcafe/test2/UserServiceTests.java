@@ -16,7 +16,7 @@ import java.util.List;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BUserServiceTests {
+public class UserServiceTests {
 
     @Autowired
     private UserService userService;
