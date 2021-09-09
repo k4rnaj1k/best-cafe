@@ -4,7 +4,6 @@ import com.k4rnaj1k.bestcafe.dto.auth.RegistrationRequestDTO;
 import com.k4rnaj1k.bestcafe.dto.auth.RoleDTO;
 import com.k4rnaj1k.bestcafe.dto.auth.UserRoleUpdateDTO;
 import com.k4rnaj1k.bestcafe.dto.menuitem.DishPostDTO;
-import com.k4rnaj1k.bestcafe.dto.menuitem.IngredientDTO;
 import com.k4rnaj1k.bestcafe.dto.order.DishOrderDTO;
 import com.k4rnaj1k.bestcafe.dto.order.OrderDTO;
 import com.k4rnaj1k.bestcafe.model.auth.Role;
@@ -16,6 +15,8 @@ import com.k4rnaj1k.bestcafe.service.UserService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.access.AuthorizationServiceException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.List;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class OrderServiceTests{
+public class OrderServiceTests {
 
     @Autowired
     private OrderService orderService;
@@ -72,9 +73,7 @@ public class OrderServiceTests{
         User admin = createUser("admin", "admin@admin.com", "admin");
         Assertions.assertNotNull(admin);
 
-        UserRoleUpdateDTO updateDTO = new UserRoleUpdateDTO();
-        updateDTO.setUsername("admin");
-        updateDTO.setAddRoles(List.of(new RoleDTO("ROLE_ADMIN")));
+        UserRoleUpdateDTO updateDTO = new UserRoleUpdateDTO("admin", List.of(new RoleDTO("ROLE_ADMIN")), Collections.emptyList());
         return userService.updateUserRoles(updateDTO);
     }
 
@@ -85,14 +84,47 @@ public class OrderServiceTests{
 
     @Test
     @Order(1)
+    @DisplayName("Create order.")
     public void createOrder() {
-        OrderDTO orderDTO = new OrderDTO();
         DishOrderDTO dishOrderDTO = new DishOrderDTO(2L, 1L, Collections.emptyList());
-        orderDTO.setDishes(List.of(dishOrderDTO));
-        orderDTO.setDrinks(Collections.emptyList());
+        OrderDTO orderDTO = new OrderDTO(List.of(dishOrderDTO), Collections.emptyList());
         orderService.createOrder(orderDTO, user1);
         Assertions.assertEquals(1, orderService.getOrders(user1).size());
         Assertions.assertEquals(0, orderService.getOrders(user2).size());
         Assertions.assertEquals(1, orderService.getOrders(admin).size());
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("Create order with too many excluded.")
+    public void createOrderWithTooManyExcluded() {
+        DishOrderDTO dishOrderDTO = new DishOrderDTO(2L, 1L, List.of(1L));
+        OrderDTO orderDTO = new OrderDTO(List.of(dishOrderDTO), Collections.emptyList());
+        Assertions.assertThrows(ResponseStatusException.class, () -> orderService.createOrder(orderDTO, user1));
+        Assertions.assertEquals(1, orderService.getOrders(user1).size());
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("Update order.")
+    public void updateOrder() {
+        DishOrderDTO dishOrder = new DishOrderDTO(2L, 1L, Collections.emptyList());
+        OrderDTO orderDTO = new OrderDTO(List.of(dishOrder), Collections.emptyList());
+        Assertions.assertThrows(AuthorizationServiceException.class, () -> orderService.updateOrder(orderDTO, 1L, user2));
+        Assertions.assertDoesNotThrow(() -> orderService.updateOrder(orderDTO, 1L, user1));
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("Update order's status")
+    public void updateOrderStatus() {
+        Assertions.assertThrows(ResponseStatusException.class, () -> orderService.updateOrderStatus(1L, com.k4rnaj1k.bestcafe.model.order.Order.OrderStatus.SENT));
+        Assertions.assertDoesNotThrow(() -> orderService.updateOrderStatus(1L, com.k4rnaj1k.bestcafe.model.order.Order.OrderStatus.ACCEPTED));
+
+        OrderDTO orderDTO = new OrderDTO(Collections.emptyList(), Collections.emptyList());
+        Assertions.assertThrows(ResponseStatusException.class, () -> orderService.updateOrder(orderDTO, 1L, admin));
+
+
+        Assertions.assertDoesNotThrow(() -> orderService.updateOrderStatus(1L, com.k4rnaj1k.bestcafe.model.order.Order.OrderStatus.DONE));
     }
 }

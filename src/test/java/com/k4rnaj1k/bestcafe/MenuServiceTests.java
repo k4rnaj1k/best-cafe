@@ -104,9 +104,7 @@ class MenuServiceTests{
     }
 
     private void createDrink() {
-        DrinkPostDTO drinkPostDTO = new DrinkPostDTO();
-        drinkPostDTO.setName("Lemonade");
-        drinkPostDTO.setPrice(10.5);
+        DrinkPostDTO drinkPostDTO = new DrinkPostDTO("Lemonade", 10.5);
         Assertions.assertNotNull(menuService.createDrink(drinkPostDTO));
     }
 
