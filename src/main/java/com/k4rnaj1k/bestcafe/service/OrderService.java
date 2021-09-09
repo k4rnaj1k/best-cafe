@@ -86,7 +86,7 @@ public class OrderService {
             throw CafeException.orderStatusException();
         }
         orderFromDb.setStatus(updatedOrderStatus);
-        return orderFromDb;
+        return orderRepository.save(orderFromDb);
     }
 
     private Order getOrderById(Long orderId) {
