@@ -18,8 +18,6 @@ import java.util.Collections;
 import java.util.List;
 
 @SpringBootTest
-@DisplayName("3Test")
-@Suite.SuiteClasses(OrderServiceTests.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class OrderServiceTests {
