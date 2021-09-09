@@ -8,6 +8,7 @@ import com.k4rnaj1k.bestcafe.service.MenuService;
 import com.k4rnaj1k.bestcafe.service.OrderService;
 import com.k4rnaj1k.bestcafe.service.UserService;
 import org.junit.jupiter.api.*;
+import org.junit.runners.Suite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.AuthorizationServiceException;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @SpringBootTest
 @DisplayName("3Test")
+@Suite.SuiteClasses(OrderServiceTests.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class OrderServiceTests {

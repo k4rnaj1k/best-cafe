@@ -7,7 +7,9 @@ import com.k4rnaj1k.bestcafe.model.auth.Role;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
 import com.k4rnaj1k.bestcafe.service.UserService;
+import com.k4rnaj1k.bestcafe.test3.OrderServiceTests;
 import org.junit.jupiter.api.*;
+import org.junit.runners.Suite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
