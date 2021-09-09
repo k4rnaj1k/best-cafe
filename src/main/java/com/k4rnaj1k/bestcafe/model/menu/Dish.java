@@ -1,7 +1,10 @@
 package com.k4rnaj1k.bestcafe.model.menu;
 
 import com.k4rnaj1k.bestcafe.dto.menuitem.DishPostDTO;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
