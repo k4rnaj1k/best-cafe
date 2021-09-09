@@ -1,4 +1,4 @@
-package com.k4rnaj1k.bestcafe;
+package com.k4rnaj1k.bestcafe.test1;
 
 import com.k4rnaj1k.bestcafe.dto.menuitem.DishPostDTO;
 import com.k4rnaj1k.bestcafe.dto.menuitem.DrinkPostDTO;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class MenuServiceTests{
+class MenuServiceTests {
 
     @Autowired
     private MenuService menuService;
@@ -110,7 +110,7 @@ class MenuServiceTests{
 
     @Test
     @Order(9)
-    @DisplayName("Create drink.")
+    @DisplayName("Create duplicate drink.")
     void createDuplicateDrink() {
         Assertions.assertThrows(ResponseStatusException.class, this::createDrink);
     }

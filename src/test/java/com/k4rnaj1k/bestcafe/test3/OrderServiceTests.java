@@ -1,14 +1,9 @@
-package com.k4rnaj1k.bestcafe;
+package com.k4rnaj1k.bestcafe.test3;
 
-import com.k4rnaj1k.bestcafe.dto.auth.RegistrationRequestDTO;
-import com.k4rnaj1k.bestcafe.dto.auth.RoleDTO;
-import com.k4rnaj1k.bestcafe.dto.auth.UserRoleUpdateDTO;
 import com.k4rnaj1k.bestcafe.dto.menuitem.DishPostDTO;
 import com.k4rnaj1k.bestcafe.dto.order.DishOrderDTO;
 import com.k4rnaj1k.bestcafe.dto.order.OrderDTO;
-import com.k4rnaj1k.bestcafe.model.auth.Role;
 import com.k4rnaj1k.bestcafe.model.auth.User;
-import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
 import com.k4rnaj1k.bestcafe.service.MenuService;
 import com.k4rnaj1k.bestcafe.service.OrderService;
 import com.k4rnaj1k.bestcafe.service.UserService;
@@ -26,66 +21,33 @@ import java.util.List;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class OrderServiceTests {
 
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
+    private final MenuService menuService;
+
+    private final User admin;
+    private final User user1;
+    private final User user2;
 
     @Autowired
-    private MenuService menuService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    private User admin;
-    private User user1;
-    private User user2;
-
-    @BeforeAll
-    public void setUp() {
-        this.createDish();
-        this.setUpRoles();
-        this.admin = createAdmin();
-        this.user1 = createUser("user", "user@email.com", "user");
-        this.user2 = createUser("user2", "user2@email.com", "user2");
+    public OrderServiceTests(OrderService orderService, MenuService menuService, UserService userService) {
+        this.orderService = orderService;
+        this.menuService = menuService;
+        this.admin = userService.findByUsername("admin");
+        this.user1 = userService.findByUsername("user1");
+        this.user2 = userService.findByUsername("user2");
     }
+
 
     private void createDish() {
         DishPostDTO dishPostDTO = new DishPostDTO("French fries", List.of(2L), 30.5);
-        menuService.createDish(dishPostDTO);
-    }
-
-    private void setUpRoles() {
-        Role userRole = new Role();
-        userRole.setName("ROLE_USER");
-
-        Role adminRole = new Role();
-        adminRole.setName("ROLE_ADMIN");
-
-        Role cookRole = new Role();
-        cookRole.setName("ROLE_COOK");
-
-        roleRepository.saveAll(List.of(adminRole, userRole, cookRole));
-    }
-
-    private User createAdmin() {
-        User admin = createUser("admin", "admin@admin.com", "admin");
-        Assertions.assertNotNull(admin);
-
-        UserRoleUpdateDTO updateDTO = new UserRoleUpdateDTO("admin", List.of(new RoleDTO("ROLE_ADMIN")), Collections.emptyList());
-        return userService.updateUserRoles(updateDTO);
-    }
-
-    private User createUser(String username, String email, String password) {
-        RegistrationRequestDTO requestDTO = new RegistrationRequestDTO(username, email, password);
-        return userService.createUser(requestDTO);
+        Assertions.assertNotNull(menuService.createDish(dishPostDTO));
     }
 
     @Test
     @Order(1)
     @DisplayName("Create order.")
     public void createOrder() {
+        createDish();
         DishOrderDTO dishOrderDTO = new DishOrderDTO(2L, 1L, Collections.emptyList());
         OrderDTO orderDTO = new OrderDTO(List.of(dishOrderDTO), Collections.emptyList());
         orderService.createOrder(orderDTO, user1);
