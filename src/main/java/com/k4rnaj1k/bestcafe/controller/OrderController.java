@@ -2,8 +2,8 @@ package com.k4rnaj1k.bestcafe.controller;
 
 import com.k4rnaj1k.bestcafe.Routes;
 import com.k4rnaj1k.bestcafe.dto.order.OrderDTO;
-import com.k4rnaj1k.bestcafe.model.order.Order;
 import com.k4rnaj1k.bestcafe.model.auth.User;
+import com.k4rnaj1k.bestcafe.model.order.Order;
 import com.k4rnaj1k.bestcafe.service.OrderService;
 import com.k4rnaj1k.bestcafe.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +40,7 @@ public class OrderController {
     }
 
     @PutMapping("{id}")
-    public Order updateOrder(@RequestBody OrderDTO orderDTO, @PathVariable("id") Long orderId, Principal principal){
+    public Order updateOrder(@RequestBody OrderDTO orderDTO, @PathVariable("id") Long orderId, Principal principal) {
         User user = userService.findByUsername(principal.getName());
         return orderService.updateOrder(orderDTO, orderId, user);
     }

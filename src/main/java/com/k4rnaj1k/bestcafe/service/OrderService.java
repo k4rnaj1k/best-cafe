@@ -2,16 +2,14 @@ package com.k4rnaj1k.bestcafe.service;
 
 import com.k4rnaj1k.bestcafe.dto.order.OrderDTO;
 import com.k4rnaj1k.bestcafe.exception.CafeException;
-import com.k4rnaj1k.bestcafe.model.order.DishOrder;
-import com.k4rnaj1k.bestcafe.model.order.DrinkOrder;
-import com.k4rnaj1k.bestcafe.model.order.Order;
 import com.k4rnaj1k.bestcafe.model.auth.Role;
 import com.k4rnaj1k.bestcafe.model.auth.User;
+import com.k4rnaj1k.bestcafe.model.order.Order;
 import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
 import com.k4rnaj1k.bestcafe.repository.menu.DishRepository;
 import com.k4rnaj1k.bestcafe.repository.menu.IngredientRepository;
-import com.k4rnaj1k.bestcafe.repository.order.DishItemRepository;
-import com.k4rnaj1k.bestcafe.repository.order.DrinkItemRepository;
+import com.k4rnaj1k.bestcafe.repository.order.DishOrderRepository;
+import com.k4rnaj1k.bestcafe.repository.order.DrinkOrderRepository;
 import com.k4rnaj1k.bestcafe.repository.order.OrderRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.access.AuthorizationServiceException;
@@ -23,16 +21,16 @@ import java.util.List;
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final DrinkItemRepository drinkItemRepository;
-    private final DishItemRepository dishItemRepository;
+    private final DrinkOrderRepository drinkOrderRepository;
+    private final DishOrderRepository dishOrderRepository;
     private final RoleRepository roleRepository;
     private final IngredientRepository ingredientRepository;
     private final DishRepository dishRepository;
 
-    public OrderService(OrderRepository orderRepository, DrinkItemRepository drinkItemRepository, DishItemRepository dishItemRepository, RoleRepository roleRepository, IngredientRepository ingredientRepository, DishRepository dishRepository) {
+    public OrderService(OrderRepository orderRepository, DrinkOrderRepository drinkOrderRepository, DishOrderRepository dishOrderRepository, RoleRepository roleRepository, IngredientRepository ingredientRepository, DishRepository dishRepository) {
         this.orderRepository = orderRepository;
-        this.drinkItemRepository = drinkItemRepository;
-        this.dishItemRepository = dishItemRepository;
+        this.drinkOrderRepository = drinkOrderRepository;
+        this.dishOrderRepository = dishOrderRepository;
         this.roleRepository = roleRepository;
         this.ingredientRepository = ingredientRepository;
         this.dishRepository = dishRepository;
@@ -48,8 +46,8 @@ public class OrderService {
 
         loadOrderFields(order);
 
-        order.setDishes(dishItemRepository.saveAll(order.getDishes()));
-        order.setDrinks(drinkItemRepository.saveAll(order.getDrinks()));
+        order.setDishes(dishOrderRepository.saveAll(order.getDishes()));
+        order.setDrinks(drinkOrderRepository.saveAll(order.getDrinks()));
         return orderRepository.save(order);
     }
 
@@ -62,7 +60,7 @@ public class OrderService {
         order.getDishes().forEach(dishOrder -> {
             if (dishOrder.getDish().getIngredients().size() <= dishOrder.getExcluded().size())
                 throw CafeException.tooManyExcludedIngredientsException();
-            if(!dishOrder.getDish().getIngredients().containsAll(dishOrder.getExcluded())){
+            if (!dishOrder.getDish().getIngredients().containsAll(dishOrder.getExcluded())) {
                 throw CafeException.excludedIngredientsException();
             }
         });
@@ -97,27 +95,27 @@ public class OrderService {
 
     public Order updateOrder(OrderDTO orderDTO, Long orderId, User user) {
         Order order = getOrderById(orderId);
-        checkOrderAccess(orderId, user, order);
         if (order.getStatus().getValue() > 1) {
             throw CafeException.orderAcceptedException(orderId);
         }
 
+        checkOrderAccess(orderId, user, order);
         Order update = Order.fromDTO(orderDTO);
-        update.setId(order.getId());
         loadOrderFields(update);
-        update.setUser(user);
         update.setCreatedAt(order.getCreatedAt());
         update.setUpdatedAt(Instant.now());
-        update.setDishes(dishItemRepository.saveAll(update.getDishes()));
-        update.setDrinks(drinkItemRepository.saveAll(update.getDrinks()));
+        update.setDishes(dishOrderRepository.saveAll(update.getDishes()));
+        update.setDrinks(drinkOrderRepository.saveAll(update.getDrinks()));
 
-        BeanUtils.copyProperties(update, order);
+        BeanUtils.copyProperties(update, order, "id", "user", "createdAt");
         return orderRepository.save(order);
     }
 
     private void checkOrderAccess(Long orderId, User user, Order order) {
-        if (order.getUser() != user && !user.getRoles().contains(roleRepository.findByName("ROLE_ADMIN"))) {
+        if (!(order.getUser().equals(user) || user.getRoles().contains(roleRepository.findByName("ROLE_ADMIN")))) {
             throw new AuthorizationServiceException("Access to order " + orderId + " denied.");
         }
     }
 }
+
+

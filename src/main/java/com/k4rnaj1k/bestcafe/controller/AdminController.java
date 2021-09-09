@@ -19,18 +19,18 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @PutMapping(Routes.USERS+"roles")
+    @PutMapping(Routes.USERS + "roles")
     public User updateUserRoles(@RequestBody UserRoleUpdateDTO updateDTO) {
         return userService.updateUserRoles(updateDTO);
     }
 
-    @DeleteMapping(Routes.USERS+"/{id}")
-    public void deleteUser(@PathVariable(name="id") Long userId){
+    @DeleteMapping(Routes.USERS + "/{id}")
+    public void deleteUser(@PathVariable(name = "id") Long userId) {
         userService.deleteById(userId);
     }
 
     @GetMapping(Routes.ADMIN)
-    public List<User> getAll(){
+    public List<User> getAll() {
         return userService.getAll();
     }
 }
