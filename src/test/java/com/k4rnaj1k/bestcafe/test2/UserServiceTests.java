@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 @SpringBootTest
-@Order(1)
+@DisplayName("2Test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserServiceTests {
 
