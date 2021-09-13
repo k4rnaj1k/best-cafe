@@ -1,15 +1,11 @@
-package com.k4rnaj1k.bestcafe.test1;
+package com.k4rnaj1k.bestcafe;
 
 import com.k4rnaj1k.bestcafe.dto.menuitem.DishPostDTO;
 import com.k4rnaj1k.bestcafe.dto.menuitem.DrinkPostDTO;
 import com.k4rnaj1k.bestcafe.dto.menuitem.IngredientDTO;
 import com.k4rnaj1k.bestcafe.exception.CafeException;
 import com.k4rnaj1k.bestcafe.service.MenuService;
-import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.*;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
-import org.junit.runners.Suite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,7 +14,8 @@ import java.util.List;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class MenuServiceTests {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class MenuServiceTest {
 
     @Autowired
     private MenuService menuService;
