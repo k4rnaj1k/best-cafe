@@ -20,10 +20,12 @@ import java.util.Map;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserServiceTest {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
-    @Autowired
-    private RoleRepository roleRepository;
+    public UserServiceTest(UserService userService) {
+        this.userService = userService;
+    }
 
     @Test
     @Order(1)
