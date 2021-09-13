@@ -9,6 +9,7 @@ import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
 import com.k4rnaj1k.bestcafe.service.UserService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Collections;
@@ -18,9 +19,9 @@ import java.util.Map;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@ImportAutoConfiguration(UserServiceConfiguration.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserServiceTest {
-
     private final UserService userService;
 
     @Autowired
