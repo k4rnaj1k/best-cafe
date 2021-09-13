@@ -18,6 +18,7 @@ import java.util.Map;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserServiceTest {
 
     private final UserService userService;
