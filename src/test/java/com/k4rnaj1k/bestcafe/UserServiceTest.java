@@ -20,32 +20,15 @@ import java.util.Map;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserServiceTest {
 
+    @Autowired
     private UserService userService;
+    @Autowired
     private RoleRepository roleRepository;
 
-
-    @Autowired
-    public UserServiceTest(UserService userService, RoleRepository roleRepository) {
-        this.userService = userService;
-        this.roleRepository = roleRepository;
-    }
-
     @Test
-    @DisplayName("Create roles.")
     @Order(1)
-    public void createRoles() {
-        String[] roleNames = {"ROLE_USER", "ROLE_ADMIN", "ROLE_COOK"};
-        for (String roleName :
-                roleNames) {
-            Role role = new Role();
-            role.setName(roleName);
-            Assertions.assertNotNull(roleRepository.save(role));
-        }
-    }
-
-    @Test
-    @Order(2)
     public void createUsers() {
+        userService.getAll().forEach(System.out::println);
         Map<String, String> userData = new HashMap<>() {{
             put("user1", "user");
             put("user2", "user");
@@ -59,7 +42,7 @@ public class UserServiceTest {
     }
 
     @Test
-    @Order(3)
+    @Order(2)
     public void updateAdmin() {
         User admin = userService.findByUsername("admin");
         Assertions.assertNotNull(admin);

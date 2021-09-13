@@ -23,11 +23,11 @@ public class UserServiceConfiguration {
     @Bean
     public UserService testUserService(UserService userService){
         setUpRoles();
-        userService.createUser(new RegistrationRequestDTO("admin", "admin@admin.com","admin"));
-        userService.createUser(new RegistrationRequestDTO("user1", "user1@user.com","user"));
-        userService.createUser(new RegistrationRequestDTO("user2", "user2@user.com","user"));
+        userService.createUser(new RegistrationRequestDTO("test-admin", "test-admin@admin.com","admin"));
+        userService.createUser(new RegistrationRequestDTO("test-user1", "test-user1@user.com","user"));
+        userService.createUser(new RegistrationRequestDTO("test-user2", "test-user2@user.com","user"));
 
-        userService.updateUserRoles(new UserRoleUpdateDTO("admin", List.of(new RoleDTO("ROLE_ADMIN")), Collections.emptyList()));
+        userService.updateUserRoles(new UserRoleUpdateDTO("test-admin", List.of(new RoleDTO("ROLE_ADMIN")), Collections.emptyList()));
         return userService;
     }
 

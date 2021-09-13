@@ -4,6 +4,8 @@ import com.k4rnaj1k.bestcafe.dto.menuitem.DishPostDTO;
 import com.k4rnaj1k.bestcafe.dto.menuitem.DrinkPostDTO;
 import com.k4rnaj1k.bestcafe.dto.menuitem.IngredientDTO;
 import com.k4rnaj1k.bestcafe.exception.CafeException;
+import com.k4rnaj1k.bestcafe.repository.menu.DishRepository;
+import com.k4rnaj1k.bestcafe.repository.menu.IngredientRepository;
 import com.k4rnaj1k.bestcafe.service.MenuService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,10 @@ public class MenuServiceTest {
 
     @Autowired
     private MenuService menuService;
+    @Autowired
+    private DishRepository dishRepository;
+    @Autowired
+    private IngredientRepository ingredientRepository;
 
     @Test
     @Order(1)
@@ -114,5 +120,11 @@ public class MenuServiceTest {
     @DisplayName("Create duplicate drink.")
     void createDuplicateDrink() {
         Assertions.assertThrows(ResponseStatusException.class, this::createDrink);
+    }
+
+    @AfterAll
+    void afterAll() {
+        dishRepository.deleteAll();
+        ingredientRepository.deleteAll();
     }
 }
