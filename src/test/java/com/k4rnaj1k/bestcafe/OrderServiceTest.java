@@ -37,9 +37,9 @@ public class OrderServiceTest {
     public OrderServiceTest(OrderService orderService, UserService testUserService, MenuService menuService) {
         this.orderService = orderService;
         this.menuService = menuService;
-        this.admin = testUserService.findByUsername("admin");
-        this.user1 = testUserService.findByUsername("user1");
-        this.user2 = testUserService.findByUsername("user2");
+        this.admin = testUserService.findByUsername("test-admin");
+        this.user1 = testUserService.findByUsername("test-user1");
+        this.user2 = testUserService.findByUsername("test-user2");
     }
 
     private Long dishId;
@@ -94,8 +94,6 @@ public class OrderServiceTest {
 
         OrderDTO orderDTO = new OrderDTO(Collections.emptyList(), Collections.emptyList());
         Assertions.assertThrows(ResponseStatusException.class, () -> orderService.updateOrder(orderDTO, 1L, admin));
-
-
         Assertions.assertDoesNotThrow(() -> orderService.updateOrderStatus(1L, com.k4rnaj1k.bestcafe.model.order.Order.OrderStatus.DONE));
     }
 }
