@@ -23,10 +23,11 @@ import java.util.Map;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserServiceTest {
     private final UserService userService;
+    private final RoleRepository testRoleRepository;
 
-    @Autowired
-    public UserServiceTest(UserService userService) {
+    public UserServiceTest(UserService userService, RoleRepository testRoleRepository) {
         this.userService = userService;
+        this.testRoleRepository = testRoleRepository;
     }
 
     @Test

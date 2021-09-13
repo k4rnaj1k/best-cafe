@@ -31,6 +31,12 @@ public class UserServiceConfiguration {
         return userService;
     }
 
+    @Bean
+    public RoleRepository testRoleRepository(RoleRepository testRoleRepository){
+        setUpRoles();
+        return roleRepository;
+    }
+
     public void setUpRoles() {
         Role userRole = new Role();
         userRole.setName("ROLE_USER");
