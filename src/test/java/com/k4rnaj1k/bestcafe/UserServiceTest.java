@@ -28,7 +28,6 @@ public class UserServiceTest {
     @Test
     @Order(1)
     public void createUsers() {
-        userService.getAll().forEach(System.out::println);
         Map<String, String> userData = new HashMap<>() {{
             put("user1", "user");
             put("user2", "user");
