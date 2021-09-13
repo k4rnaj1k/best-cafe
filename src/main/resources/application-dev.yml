@@ -11,6 +11,7 @@ server:
   error:
     include-exception: true
     include-message: always
+    include-binding-errors: always
 jwt:
   token:
     secret: "k4rnaj1ks-cafe"

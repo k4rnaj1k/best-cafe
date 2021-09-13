@@ -7,8 +7,10 @@ import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.service.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
@@ -30,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public UserTokenDTO login(@RequestBody AuthenticationRequestDTO requestDTO) {
+    public UserTokenDTO login(@RequestBody @Valid AuthenticationRequestDTO requestDTO) {
         String username = requestDTO.username();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDTO.password()));
         User user = userService.findByUsername(username);
