@@ -1,7 +1,10 @@
 package com.k4rnaj1k.bestcafe.model.menu;
 
 import com.k4rnaj1k.bestcafe.dto.menuitem.DrinkPostDTO;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -25,8 +28,8 @@ public class Drink {
 
     public static Drink fromDrinkDTO(DrinkPostDTO drinkPostDTO) {
         Drink drink = new Drink();
-        drink.setName(drinkPostDTO.getName());
-        drink.setPrice(drinkPostDTO.getPrice());
+        drink.setName(drinkPostDTO.name());
+        drink.setPrice(drinkPostDTO.price());
         return drink;
     }
 
@@ -41,6 +44,6 @@ public class Drink {
 
     @Override
     public int hashCode() {
-        return 870025257;
+        return Objects.hash(id, name);
     }
 }

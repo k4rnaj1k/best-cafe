@@ -8,7 +8,6 @@ import com.k4rnaj1k.bestcafe.model.menu.Dish;
 import com.k4rnaj1k.bestcafe.model.menu.Drink;
 import com.k4rnaj1k.bestcafe.model.menu.Ingredient;
 import com.k4rnaj1k.bestcafe.service.MenuService;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,7 +22,7 @@ public class ItemController {
     }
 
     //region Ingredients
-    @DeleteMapping(Routes.INGREDIENTS+"/{id}")
+    @DeleteMapping(Routes.INGREDIENTS + "/{id}")
     public void removeIngredient(@PathVariable("id") Long ingredientId) {
         itemService.removeIngredientById(ingredientId);
     }
@@ -47,12 +46,12 @@ public class ItemController {
 
     //region Dishes
     @DeleteMapping(Routes.DISHES + "/{id}")
-    public void removeDish(@PathVariable("id") Long dishId){
+    public void removeDish(@PathVariable("id") Long dishId) {
         itemService.removeDishById(dishId);
     }
 
     @PutMapping(Routes.DISHES + "/{id}")
-    public Dish updateDish(@PathVariable("id") Long dishId,@RequestBody DishPostDTO dishPostDTO) {
+    public Dish updateDish(@PathVariable("id") Long dishId, @RequestBody DishPostDTO dishPostDTO) {
         return itemService.updateDish(dishId, dishPostDTO);
     }
 
@@ -61,7 +60,7 @@ public class ItemController {
         return itemService.getDishes();
     }
 
-    @GetMapping(Routes.DISHES+"/{id}")
+    @GetMapping(Routes.DISHES + "/{id}")
     public Dish getDishes(@PathVariable("id") Long dishId) {
         return itemService.getDishWithId(dishId);
     }
@@ -70,7 +69,6 @@ public class ItemController {
     public Dish createDish(@RequestBody DishPostDTO dishPostDTO) {
         return itemService.createDish(dishPostDTO);
     }
-
 
 
     //endregion
@@ -82,7 +80,7 @@ public class ItemController {
     }
 
     @PostMapping(Routes.DRINKS)
-    public Drink createDrink(@RequestBody @Valid DrinkPostDTO drinkPostDTO){
+    public Drink createDrink(@RequestBody @Valid DrinkPostDTO drinkPostDTO) {
         return itemService.createDrink(drinkPostDTO);
     }
     //endregion

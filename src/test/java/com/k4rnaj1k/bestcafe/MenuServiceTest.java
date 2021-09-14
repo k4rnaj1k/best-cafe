@@ -4,6 +4,8 @@ import com.k4rnaj1k.bestcafe.dto.menuitem.DishPostDTO;
 import com.k4rnaj1k.bestcafe.dto.menuitem.DrinkPostDTO;
 import com.k4rnaj1k.bestcafe.dto.menuitem.IngredientDTO;
 import com.k4rnaj1k.bestcafe.exception.CafeException;
+import com.k4rnaj1k.bestcafe.repository.menu.DishRepository;
+import com.k4rnaj1k.bestcafe.repository.menu.IngredientRepository;
 import com.k4rnaj1k.bestcafe.service.MenuService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +16,15 @@ import java.util.List;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class MenuServiceTests{
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class MenuServiceTest {
 
     @Autowired
     private MenuService menuService;
+    @Autowired
+    private DishRepository dishRepository;
+    @Autowired
+    private IngredientRepository ingredientRepository;
 
     @Test
     @Order(1)
@@ -104,16 +111,20 @@ class MenuServiceTests{
     }
 
     private void createDrink() {
-        DrinkPostDTO drinkPostDTO = new DrinkPostDTO();
-        drinkPostDTO.setName("Lemonade");
-        drinkPostDTO.setPrice(10.5);
+        DrinkPostDTO drinkPostDTO = new DrinkPostDTO("Lemonade", 10.5);
         Assertions.assertNotNull(menuService.createDrink(drinkPostDTO));
     }
 
     @Test
     @Order(9)
-    @DisplayName("Create drink.")
+    @DisplayName("Create duplicate drink.")
     void createDuplicateDrink() {
         Assertions.assertThrows(ResponseStatusException.class, this::createDrink);
+    }
+
+    @AfterAll
+    void afterAll() {
+        dishRepository.deleteAll();
+        ingredientRepository.deleteAll();
     }
 }

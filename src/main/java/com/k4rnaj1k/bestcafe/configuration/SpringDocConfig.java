@@ -15,6 +15,6 @@ public class SpringDocConfig {
         return new OpenAPI().components(new Components().addSecuritySchemes("bearer-key", new SecurityScheme().type(SecurityScheme.Type.HTTP)
                         .scheme("bearer")
                         .bearerFormat("JWT"))).addSecurityItem(new SecurityRequirement().addList("bearer-key"))
-                .info(new Info().title("k4rnaj1k's cafe"));
+                .info(new Info().title("k4rnaj1k's cafe").version("v1.0"));
     }
 }

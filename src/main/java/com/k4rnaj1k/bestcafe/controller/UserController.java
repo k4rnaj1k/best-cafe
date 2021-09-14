@@ -1,20 +1,15 @@
 package com.k4rnaj1k.bestcafe.controller;
 
 import com.k4rnaj1k.bestcafe.Routes;
-import com.k4rnaj1k.bestcafe.dto.auth.UserUpdateDTO;
-import com.k4rnaj1k.bestcafe.dto.auth.AuthenticationRequestDTO;
-import com.k4rnaj1k.bestcafe.dto.auth.DeleteUserRequestDTO;
-import com.k4rnaj1k.bestcafe.dto.auth.RegistrationRequestDTO;
-import com.k4rnaj1k.bestcafe.dto.auth.UserTokenDTO;
+import com.k4rnaj1k.bestcafe.dto.auth.*;
 import com.k4rnaj1k.bestcafe.dto.user.UserResponceDTO;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.service.UserService;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
@@ -36,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public UserTokenDTO login(@RequestBody AuthenticationRequestDTO requestDTO) {
+    public UserTokenDTO login(@RequestBody @Valid AuthenticationRequestDTO requestDTO) {
         String username = requestDTO.username();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDTO.password()));
         User user = userService.findByUsername(username);
@@ -44,13 +39,13 @@ public class UserController {
     }
 
     @PutMapping
-    public UserResponceDTO updateUserDetails(@RequestBody UserUpdateDTO userUpdateDTO, Principal principal){
+    public UserResponceDTO updateUserDetails(@RequestBody UserUpdateDTO userUpdateDTO, Principal principal) {
         User updatedUser = userService.updateUser(userUpdateDTO, principal.getName());
         return UserResponceDTO.fromUser(updatedUser);
     }
 
     @DeleteMapping
-    public void deleteUser(@RequestBody DeleteUserRequestDTO userRequestDTO){
+    public void deleteUser(@RequestBody DeleteUserRequestDTO userRequestDTO) {
         userService.deleteUser(userRequestDTO);
     }
 }

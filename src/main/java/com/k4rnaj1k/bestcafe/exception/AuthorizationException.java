@@ -13,7 +13,6 @@ public class AuthorizationException {
 
     public static ResponseStatusException userWithIdNotFound(Long id) {
         return new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id " + id + " not found.");
-
     }
 
     public static ResponseStatusException userWithUsernameNotFound(String username) {

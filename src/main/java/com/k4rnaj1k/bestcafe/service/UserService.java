@@ -1,10 +1,6 @@
 package com.k4rnaj1k.bestcafe.service;
 
-import com.k4rnaj1k.bestcafe.dto.auth.UserUpdateDTO;
-import com.k4rnaj1k.bestcafe.dto.auth.DeleteUserRequestDTO;
-import com.k4rnaj1k.bestcafe.dto.auth.RegistrationRequestDTO;
-import com.k4rnaj1k.bestcafe.dto.auth.UserTokenDTO;
-import com.k4rnaj1k.bestcafe.dto.auth.UserRoleUpdateDTO;
+import com.k4rnaj1k.bestcafe.dto.auth.*;
 import com.k4rnaj1k.bestcafe.exception.AuthorizationException;
 import com.k4rnaj1k.bestcafe.model.auth.Role;
 import com.k4rnaj1k.bestcafe.model.auth.User;
@@ -63,8 +59,8 @@ public class UserService {
     }
 
     public User updateUserRoles(UserRoleUpdateDTO updateDTO) {
-        User user = userRepository.findByUsername(updateDTO.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("Username " + updateDTO.getUsername() + " not found"));
+        User user = userRepository.findByUsername(updateDTO.username())
+                .orElseThrow(() -> new UsernameNotFoundException("Username " + updateDTO.username() + " not found"));
         List<Role> userRoles = user.getRoles();
         List<Role> addRoles = new ArrayList<>();
         copyRolesFromDTO(updateDTO, addRoles);
@@ -74,39 +70,42 @@ public class UserService {
         copyRolesFromDTO(updateDTO, removeRoles);
 
         user.setRoles(userRoles);
-        user.getRoles().forEach(role-> System.out.println(role.getName()));
         return userRepository.save(user);
     }
 
     private void copyRolesFromDTO(UserRoleUpdateDTO updateDTO, List<Role> copyTo) {
-        updateDTO.getAddRoles().forEach(addRole -> copyTo.add(roleRepository.findByName(addRole.name())));
+        updateDTO.addRoles().forEach(addRole -> copyTo.add(roleRepository.findByName(addRole.name())));
     }
 
     public User updateUser(UserUpdateDTO userUpdateDTO, String username) {
         User user = userRepository.getByUsername(username);
-        if (userUpdateDTO.getFirstName() != null) {
-            user.setFirstName(userUpdateDTO.getFirstName());
+        if (userUpdateDTO.firstName() != null) {
+            user.setFirstName(userUpdateDTO.firstName());
         }
 
-        if (userUpdateDTO.getLastName() != null) {
-            user.setLastName(userUpdateDTO.getLastName());
+        if (userUpdateDTO.lastName() != null) {
+            user.setLastName(userUpdateDTO.lastName());
         }
 
-        if (userUpdateDTO.getNewPassword() != null && passwordEncoder.matches(userUpdateDTO.getPassword(), user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(userUpdateDTO.getNewPassword()));
+        if (userUpdateDTO.newPassword() != null && passwordEncoder.matches(userUpdateDTO.password(), user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(userUpdateDTO.newPassword()));
         }
         return user;
     }
 
     public void deleteUser(DeleteUserRequestDTO userRequestDTO) {
-        User delete = userRepository.findByUsername(userRequestDTO.getUsername())
-                .orElseThrow(() -> AuthorizationException.userWithUsernameNotFound(userRequestDTO.getUsername()));
-        if (passwordEncoder.matches(userRequestDTO.getPassword(), delete.getPassword())) {
+        User delete = userRepository.findByUsername(userRequestDTO.username())
+                .orElseThrow(() -> AuthorizationException.userWithUsernameNotFound(userRequestDTO.username()));
+        if (passwordEncoder.matches(userRequestDTO.password(), delete.getPassword())) {
             userRepository.delete(delete);
         }
     }
 
     public UserTokenDTO getToken(User user) {
         return new UserTokenDTO(user.getUsername(), jwtTokenProvider.createToken(user.getUsername(), user.getRoles()));
+    }
+
+    public List<Role> getRoles() {
+        return roleRepository.findAll();
     }
 }

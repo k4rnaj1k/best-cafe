@@ -3,8 +3,10 @@ package com.k4rnaj1k.bestcafe.model.order;
 import com.k4rnaj1k.bestcafe.dto.order.DishOrderDTO;
 import com.k4rnaj1k.bestcafe.model.menu.Dish;
 import com.k4rnaj1k.bestcafe.model.menu.Ingredient;
-import lombok.*;
-import org.hibernate.Hibernate;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -55,14 +57,13 @@ public class DishOrder {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         DishOrder dishOrder = (DishOrder) o;
-
         return Objects.equals(id, dishOrder.id);
     }
 
     @Override
     public int hashCode() {
-        return 1003561179;
+        return Objects.hash(id);
     }
 }

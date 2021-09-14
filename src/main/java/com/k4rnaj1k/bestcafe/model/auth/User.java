@@ -3,8 +3,10 @@ package com.k4rnaj1k.bestcafe.model.auth;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.k4rnaj1k.bestcafe.dto.auth.RegistrationRequestDTO;
 import com.k4rnaj1k.bestcafe.model.order.Order;
-import lombok.*;
-import org.hibernate.Hibernate;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,11 +18,12 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Table(name = "users")
-public class User{
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String username;
 
     @Column(name = "first_name")
@@ -59,14 +62,13 @@ public class User{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-
-        return Objects.equals(id, user.id);
+        return id.equals(user.id) && username.equals(user.username);
     }
 
     @Override
     public int hashCode() {
-        return 562048007;
+        return Objects.hash(id, username);
     }
 }

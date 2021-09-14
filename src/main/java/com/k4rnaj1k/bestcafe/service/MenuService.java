@@ -42,7 +42,7 @@ public class MenuService {
     }
 
     public Dish createDish(DishPostDTO dishPostDTO) {
-        if(dishRepository.existsByName(dishPostDTO.name())){
+        if (dishRepository.existsByName(dishPostDTO.name())) {
             throw CafeException.dishAlreadyExists(dishPostDTO.name());
         }
         Dish dish = Dish.fromPostDTO(dishPostDTO);
@@ -86,8 +86,8 @@ public class MenuService {
     }
 
     public Drink createDrink(DrinkPostDTO drinkPostDTO) {
-        if(drinkRepository.existsByName(drinkPostDTO.getName())){
-            throw CafeException.drinkExistsException(drinkPostDTO.getName());
+        if (drinkRepository.existsByName(drinkPostDTO.name())) {
+            throw CafeException.drinkExistsException(drinkPostDTO.name());
         }
         Drink drink = Drink.fromDrinkDTO(drinkPostDTO);
         return drinkRepository.save(drink);
@@ -98,7 +98,7 @@ public class MenuService {
         dishRepository.delete(dish);
     }
 
-    public Dish updateDish(Long dishId,DishPostDTO dishPostDTO) {
+    public Dish updateDish(Long dishId, DishPostDTO dishPostDTO) {
         Dish dish = getDishWithId(dishId);
         dish.setName(dishPostDTO.name());
         List<Ingredient> ingredients = getDishIngredientsFromIds(dishPostDTO.ingredients());

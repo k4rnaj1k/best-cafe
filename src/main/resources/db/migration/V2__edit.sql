@@ -1,1 +1,2 @@
-alter table orders drop column price;
+alter table orders
+    drop column price;

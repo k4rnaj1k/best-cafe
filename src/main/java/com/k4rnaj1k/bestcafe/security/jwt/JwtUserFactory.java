@@ -1,7 +1,6 @@
 package com.k4rnaj1k.bestcafe.security.jwt;
 
 import com.k4rnaj1k.bestcafe.model.auth.Role;
-import com.k4rnaj1k.bestcafe.model.auth.Status;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
