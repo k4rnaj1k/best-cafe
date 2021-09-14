@@ -10,6 +10,7 @@ import com.k4rnaj1k.bestcafe.service.UserService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import java.util.Map;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DirtiesContext
 public class UserServiceTest {
 
 
@@ -39,9 +41,9 @@ public class UserServiceTest {
     public void createUsers() {
         System.out.println(userService.getRoles());
         Map<String, String> userData = new HashMap<>() {{
-            put("user1", "user");
-            put("user2", "user");
-            put("admin", "admin");
+            put("test-user1", "test-user");
+            put("test-user2", "test-user");
+            put("test-admin", "test-admin");
         }};
 
         userData.forEach((name, password) -> {
@@ -53,7 +55,7 @@ public class UserServiceTest {
     @Test
     @Order(2)
     public void updateAdmin() {
-        User admin = userService.findByUsername("admin");
+        User admin = userService.findByUsername("test-admin");
         Assertions.assertNotNull(admin);
         UserRoleUpdateDTO updateDTO = new UserRoleUpdateDTO(admin.getUsername(), List.of(new RoleDTO("ROLE_ADMIN")), Collections.emptyList());
         Assertions.assertNotNull(userService.updateUserRoles(updateDTO));

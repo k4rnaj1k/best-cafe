@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.access.AuthorizationServiceException;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
@@ -25,6 +26,7 @@ import java.util.List;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @PropertySource("classpath:/application-orderservice.properties")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DirtiesContext
 public class OrderServiceTest {
 
     private final User admin;
