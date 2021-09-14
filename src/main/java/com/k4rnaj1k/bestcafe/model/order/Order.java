@@ -7,7 +7,6 @@ import com.k4rnaj1k.bestcafe.model.auth.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.Instant;

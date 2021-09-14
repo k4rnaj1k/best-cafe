@@ -9,7 +9,6 @@ import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
 import com.k4rnaj1k.bestcafe.service.UserService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Collections;
@@ -19,20 +18,26 @@ import java.util.Map;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@ImportAutoConfiguration(UserServiceConfiguration.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserServiceTest {
-    private final UserService userService;
-    private final RoleRepository testRoleRepository;
 
-    public UserServiceTest(UserService userService, RoleRepository testRoleRepository) {
-        this.userService = userService;
-        this.testRoleRepository = testRoleRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @BeforeAll
+    public void setUserService() {
+        UserUtils.setUpRoles(roleRepository);
     }
+
 
     @Test
     @Order(1)
     public void createUsers() {
+        System.out.println(userService.getRoles());
         Map<String, String> userData = new HashMap<>() {{
             put("user1", "user");
             put("user2", "user");

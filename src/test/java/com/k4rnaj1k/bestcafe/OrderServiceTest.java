@@ -7,13 +7,14 @@ import com.k4rnaj1k.bestcafe.dto.order.OrderDTO;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.model.menu.Dish;
 import com.k4rnaj1k.bestcafe.model.menu.Ingredient;
+import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
 import com.k4rnaj1k.bestcafe.service.MenuService;
 import com.k4rnaj1k.bestcafe.service.OrderService;
 import com.k4rnaj1k.bestcafe.service.UserService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -22,24 +23,26 @@ import java.util.List;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Import(UserServiceConfiguration.class)
+@PropertySource("classpath:/application-orderservice.properties")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class OrderServiceTest {
-
-    private final OrderService orderService;
 
     private final User admin;
     private final User user1;
     private final User user2;
+
     private final MenuService menuService;
+    private final OrderService orderService;
 
     @Autowired
-    public OrderServiceTest(OrderService orderService, UserService testUserService, MenuService menuService) {
-        this.orderService = orderService;
+    public OrderServiceTest(OrderService orderService, MenuService menuService, RoleRepository roleRepository, UserService userService) {
         this.menuService = menuService;
-        this.admin = testUserService.findByUsername("test-admin");
-        this.user1 = testUserService.findByUsername("test-user1");
-        this.user2 = testUserService.findByUsername("test-user2");
+        this.orderService = orderService;
+        UserUtils.setUpRoles(roleRepository);
+        UserUtils.setUpUsers(userService);
+        admin = userService.findByUsername("admin");
+        user1 = userService.findByUsername("user1");
+        user2 = userService.findByUsername("user2");
     }
 
     private Long dishId;

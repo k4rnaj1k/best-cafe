@@ -7,6 +7,7 @@ import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
 import com.k4rnaj1k.bestcafe.repository.auth.UserRepository;
 import com.k4rnaj1k.bestcafe.security.jwt.JwtTokenProvider;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -103,5 +104,9 @@ public class UserService {
 
     public UserTokenDTO getToken(User user) {
         return new UserTokenDTO(user.getUsername(), jwtTokenProvider.createToken(user.getUsername(), user.getRoles()));
+    }
+
+    public List<Role> getRoles() {
+        return roleRepository.findAll();
     }
 }
