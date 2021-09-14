@@ -55,7 +55,7 @@ public class UserServiceTest {
     @Test
     @Order(2)
     public void updateAdmin() {
-        User admin = userService.findByUsername("test-admin");
+        User admin = userService.findByUsername("admin");
         Assertions.assertNotNull(admin);
         UserRoleUpdateDTO updateDTO = new UserRoleUpdateDTO(admin.getUsername(), List.of(new RoleDTO("ROLE_ADMIN")), Collections.emptyList());
         Assertions.assertNotNull(userService.updateUserRoles(updateDTO));
