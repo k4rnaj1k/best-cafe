@@ -35,16 +35,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/api/v1/users/register").anonymous()
-                .antMatchers(HttpMethod.GET, Routes.DISHES, Routes.DRINKS).hasRole("USER")
-                .antMatchers(HttpMethod.POST, Routes.ORDERS).hasRole("USER")
-                .antMatchers(Routes.INGREDIENTS, Routes.ORDERS).hasRole("COOK")
-                .antMatchers(HttpMethod.POST, Routes.DISHES).hasRole("COOK")
-                .antMatchers(HttpMethod.PUT, Routes.ORDERS_STATUS).hasRole("COOK")
-                .antMatchers(Routes.ADMIN).hasRole("ADMIN")
+                //user controller
                 .antMatchers(HttpMethod.PUT, Routes.USERS).hasRole("USER")
-                .antMatchers(Routes.USERS).anonymous()
-                .antMatchers("/api/v1/users/admin/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, Routes.USERS).hasRole("ADMIN")
+                .antMatchers(Routes.REGISTER).anonymous()
+                .antMatchers(Routes.LOGIN).anonymous()
+
+                //order controller
+                .antMatchers(HttpMethod.PUT, Routes.ORDERS+"/{\\d+}").hasRole("USER")
+                .antMatchers(HttpMethod.PUT, Routes.ORDERS_STATUS).hasAnyRole("COOK", "ADMIN")
+                .antMatchers(Routes.ORDERS).authenticated()
+
+                //item controller
+                .antMatchers(Routes.INGREDIENTS+"/{\\d+}").hasAnyRole("ADMIN", "COOK")
+                .antMatchers(Routes.DISHES+"{\\d+}").hasAnyRole("ADMIN", "COOK")
+                .antMatchers(HttpMethod.GET, Routes.DISHES, Routes.DRINKS).anonymous()
+                .antMatchers(HttpMethod.POST, Routes.DISHES, Routes.INGREDIENTS, Routes.DRINKS).hasAnyRole("ADMIN", "COOK")
+
+                //admin controller
+                .antMatchers(Routes.USER_ROLES, Routes.USERS+"{\\d+}", Routes.ADMIN).hasRole("ADMIN")
+
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
 
