@@ -33,12 +33,12 @@ public class ItemController {
     }
 
     @PutMapping(Routes.INGREDIENTS + "/{id}")
-    public Ingredient updateIngredient(@PathVariable("id") Long ingredientId, @RequestBody IngredientDTO updatedIngredient) {
+    public Ingredient updateIngredient(@PathVariable("id") Long ingredientId, @RequestBody @Valid IngredientDTO updatedIngredient) {
         return itemService.updateIngredient(ingredientId, updatedIngredient);
     }
 
     @PostMapping(Routes.INGREDIENTS)
-    public Ingredient createIngredient(@RequestBody IngredientDTO ingredientDto) {
+    public Ingredient createIngredient(@RequestBody @Valid IngredientDTO ingredientDto) {
         return itemService.createIngredient(ingredientDto);
     }
     //endregion
@@ -51,7 +51,7 @@ public class ItemController {
     }
 
     @PutMapping(Routes.DISHES + "/{id}")
-    public Dish updateDish(@PathVariable("id") Long dishId, @RequestBody DishPostDTO dishPostDTO) {
+    public Dish updateDish(@PathVariable("id") Long dishId, @RequestBody @Valid DishPostDTO dishPostDTO) {
         return itemService.updateDish(dishId, dishPostDTO);
     }
 
@@ -66,10 +66,9 @@ public class ItemController {
     }
 
     @PostMapping(Routes.DISHES)
-    public Dish createDish(@RequestBody DishPostDTO dishPostDTO) {
+    public Dish createDish(@RequestBody @Valid DishPostDTO dishPostDTO) {
         return itemService.createDish(dishPostDTO);
     }
-
 
     //endregion
 

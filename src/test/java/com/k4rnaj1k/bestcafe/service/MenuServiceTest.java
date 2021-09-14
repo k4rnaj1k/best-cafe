@@ -1,4 +1,4 @@
-package com.k4rnaj1k.bestcafe;
+package com.k4rnaj1k.bestcafe.service;
 
 import com.k4rnaj1k.bestcafe.dto.menuitem.DishPostDTO;
 import com.k4rnaj1k.bestcafe.dto.menuitem.DrinkPostDTO;

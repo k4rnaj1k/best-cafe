@@ -4,13 +4,15 @@ import com.k4rnaj1k.bestcafe.Routes;
 import com.k4rnaj1k.bestcafe.dto.auth.UserRoleUpdateDTO;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(Routes.API_URL)
 public class AdminController {
     private final UserService userService;
 
@@ -19,8 +21,8 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @PutMapping(Routes.USERS + "roles")
-    public User updateUserRoles(@RequestBody UserRoleUpdateDTO updateDTO) {
+    @PutMapping(Routes.USERS + "/roles")
+    public User updateUserRoles(@RequestBody @Valid UserRoleUpdateDTO updateDTO) {
         return userService.updateUserRoles(updateDTO);
     }
 

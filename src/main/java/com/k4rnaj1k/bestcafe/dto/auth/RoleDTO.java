@@ -1,4 +1,6 @@
 package com.k4rnaj1k.bestcafe.dto.auth;
 
-public record RoleDTO(String name) {
+import javax.validation.constraints.NotBlank;
+
+public record RoleDTO(@NotBlank String name) {
 }

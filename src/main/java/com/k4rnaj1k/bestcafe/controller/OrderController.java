@@ -8,6 +8,7 @@ import com.k4rnaj1k.bestcafe.service.OrderService;
 import com.k4rnaj1k.bestcafe.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order createOrder(@RequestBody OrderDTO order, Principal principal) {
+    public Order createOrder(@RequestBody @Valid OrderDTO order, Principal principal) {
         User user = userService.findByUsername(principal.getName());
         return orderService.createOrder(order, user);
     }
@@ -40,7 +41,7 @@ public class OrderController {
     }
 
     @PutMapping("{id}")
-    public Order updateOrder(@RequestBody OrderDTO orderDTO, @PathVariable("id") Long orderId, Principal principal) {
+    public Order updateOrder(@RequestBody @Valid OrderDTO orderDTO, @PathVariable("id") Long orderId, Principal principal) {
         User user = userService.findByUsername(principal.getName());
         return orderService.updateOrder(orderDTO, orderId, user);
     }

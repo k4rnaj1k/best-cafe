@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping("register")
-    public UserTokenDTO register(@RequestBody RegistrationRequestDTO requestDTO) {
+    public UserTokenDTO register(@RequestBody @Valid RegistrationRequestDTO requestDTO) {
         var user = userService.createUser(requestDTO);
         return userService.getToken(user);
     }
@@ -39,13 +39,13 @@ public class UserController {
     }
 
     @PutMapping
-    public UserResponceDTO updateUserDetails(@RequestBody UserUpdateDTO userUpdateDTO, Principal principal) {
+    public UserResponceDTO updateUserDetails(@RequestBody @Valid UserUpdateDTO userUpdateDTO, Principal principal) {
         User updatedUser = userService.updateUser(userUpdateDTO, principal.getName());
         return UserResponceDTO.fromUser(updatedUser);
     }
 
     @DeleteMapping
-    public void deleteUser(@RequestBody DeleteUserRequestDTO userRequestDTO) {
+    public void deleteUser(@RequestBody @Valid DeleteUserRequestDTO userRequestDTO) {
         userService.deleteUser(userRequestDTO);
     }
 }
