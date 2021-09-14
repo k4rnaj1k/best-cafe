@@ -13,7 +13,6 @@ import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
-@RequestMapping(Routes.USERS)
 public class UserController {
 
     private final AuthenticationManager authenticationManager;
@@ -24,13 +23,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("register")
+    @PostMapping(Routes.USERS+"/register")
     public UserTokenDTO register(@RequestBody @Valid RegistrationRequestDTO requestDTO) {
         var user = userService.createUser(requestDTO);
         return userService.getToken(user);
     }
 
-    @PostMapping("login")
+    @PostMapping(Routes.USERS+"/login")
     public UserTokenDTO login(@RequestBody @Valid AuthenticationRequestDTO requestDTO) {
         String username = requestDTO.username();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDTO.password()));
@@ -38,13 +37,13 @@ public class UserController {
         return userService.getToken(user);
     }
 
-    @PutMapping
+    @PutMapping(Routes.USERS)
     public UserResponceDTO updateUserDetails(@RequestBody @Valid UserUpdateDTO userUpdateDTO, Principal principal) {
         User updatedUser = userService.updateUser(userUpdateDTO, principal.getName());
         return UserResponceDTO.fromUser(updatedUser);
     }
 
-    @DeleteMapping
+    @DeleteMapping(Routes.USERS)
     public void deleteUser(@RequestBody @Valid DeleteUserRequestDTO userRequestDTO) {
         userService.deleteUser(userRequestDTO);
     }

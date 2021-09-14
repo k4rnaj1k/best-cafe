@@ -19,7 +19,7 @@ public class Routes {
     public static final String DRINKS = "/drinks";
     public static final String ORDERS = "/orders";
     public static final String ORDERS_STATUS = ORDERS + "/status";
-    public static final String ADMIN = USERS + "/admins";
+    public static final String ADMIN = USERS + "/admin";
     public static final String REGISTER = USERS + "/register";
     public static final String LOGIN = USERS + "/login";
     public static final String USER_ROLES = USERS + "/roles";

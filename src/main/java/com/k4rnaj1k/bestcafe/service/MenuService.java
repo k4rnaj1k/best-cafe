@@ -13,6 +13,7 @@ import com.k4rnaj1k.bestcafe.repository.menu.IngredientRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuService {

@@ -11,11 +11,13 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -98,6 +100,8 @@ public class UserService {
                 .orElseThrow(() -> AuthorizationException.userWithUsernameNotFound(userRequestDTO.username()));
         if (passwordEncoder.matches(userRequestDTO.password(), delete.getPassword())) {
             userRepository.delete(delete);
+        }else{
+            throw new AuthenticationServiceException("User password does not match.");
         }
     }
 
@@ -107,5 +111,9 @@ public class UserService {
 
     public List<Role> getRoles() {
         return roleRepository.findAll();
+    }
+
+    public void deleteByUsername(String username) {
+        userRepository.deleteByUsername(username);
     }
 }
