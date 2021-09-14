@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class UserUtils {
-    public static void setUpUsers(UserService userService){
+    public static void setUpUsers(UserService userService) {
         userService.createUser(new RegistrationRequestDTO("admin", "admin@admin.com", "admin"));
         userService.createUser(new RegistrationRequestDTO("user1", "user1@user.com", "user"));
         userService.createUser(new RegistrationRequestDTO("user2", "user2@user.com", "user"));

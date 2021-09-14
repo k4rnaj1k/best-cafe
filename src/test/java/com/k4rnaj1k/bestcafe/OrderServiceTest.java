@@ -14,7 +14,6 @@ import com.k4rnaj1k.bestcafe.service.UserService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,7 +23,6 @@ import java.util.List;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@PropertySource("classpath:/application-orderservice.properties")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DirtiesContext
 public class OrderServiceTest {

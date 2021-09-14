@@ -3,7 +3,6 @@ package com.k4rnaj1k.bestcafe;
 import com.k4rnaj1k.bestcafe.dto.auth.RegistrationRequestDTO;
 import com.k4rnaj1k.bestcafe.dto.auth.RoleDTO;
 import com.k4rnaj1k.bestcafe.dto.auth.UserRoleUpdateDTO;
-import com.k4rnaj1k.bestcafe.model.auth.Role;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
 import com.k4rnaj1k.bestcafe.service.UserService;
