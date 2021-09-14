@@ -9,6 +9,7 @@ import com.k4rnaj1k.bestcafe.service.UserService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Collections;
@@ -40,9 +41,9 @@ public class UserServiceTest {
     public void createUsers() {
         System.out.println(userService.getRoles());
         Map<String, String> userData = new HashMap<>() {{
-            put("test-user1", "test-user");
-            put("test-user2", "test-user");
-            put("test-admin", "test-admin");
+            put("user1", "user");
+            put("user2", "user");
+            put("admin", "admin");
         }};
 
         userData.forEach((name, password) -> {
@@ -59,5 +60,12 @@ public class UserServiceTest {
         UserRoleUpdateDTO updateDTO = new UserRoleUpdateDTO(admin.getUsername(), List.of(new RoleDTO("ROLE_ADMIN")), Collections.emptyList());
         Assertions.assertNotNull(userService.updateUserRoles(updateDTO));
         Assertions.assertTrue(() -> userService.findByUsername(admin.getUsername()).getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_ADMIN")));
+    }
+
+    @Test
+    @Order(3)
+    public void createDuplicateUser(){
+        RegistrationRequestDTO requestDTO = new RegistrationRequestDTO("admin", "admin@email.com", "admin");
+        Assertions.assertThrows(AuthenticationServiceException.class, ()->userService.createUser(requestDTO));
     }
 }
