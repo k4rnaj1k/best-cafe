@@ -18,7 +18,7 @@ public class SpringDocConfig {
         return new OpenAPI().components(new Components().addSecuritySchemes("bearer-key", new SecurityScheme().type(SecurityScheme.Type.HTTP)
                         .scheme("bearer")
                         .bearerFormat("JWT"))).addSecurityItem(new SecurityRequirement().addList("bearer-key"))
-                .info(new Info().title("k4rnaj1k's cafe").version("v1.0"));
-//                .servers(List.of(new Server().url("http://localhost:8080/api/v1").description("local server"), new Server().url("https://best-cafe.herokuapp.com/api/v1").description("remote heroku server")));
+                .info(new Info().title("k4rnaj1k's cafe").version("v1.0"))
+                .servers(List.of(new Server().url("http://localhost:8080/api/v1").description("local server"), new Server().url("https://best-cafe.herokuapp.com/api/v1").description("remote heroku server")));
     }
 }
