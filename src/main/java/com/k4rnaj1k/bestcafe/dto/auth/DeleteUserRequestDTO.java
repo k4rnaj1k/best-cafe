@@ -1,5 +1,7 @@
 package com.k4rnaj1k.bestcafe.dto.auth;
 
-public record DeleteUserRequestDTO(String username,
-                                   String password) {
+import javax.validation.constraints.NotBlank;
+
+public record DeleteUserRequestDTO(@NotBlank String username,
+                                   @NotBlank String password) {
 }

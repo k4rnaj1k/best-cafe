@@ -5,6 +5,7 @@ import com.k4rnaj1k.bestcafe.model.menu.Dish;
 import org.springframework.data.annotation.Reference;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public record DishOrderDTO(
@@ -15,6 +16,6 @@ public record DishOrderDTO(
         @Min(1L)
         Long amount,
 
-        @Reference(Integer.class)
+        @NotNull
         List<Long> excludedIngredients) {
 }

@@ -11,11 +11,13 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -29,18 +31,22 @@ public class UserService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    @Transactional(readOnly = true)
     public User findByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user " + username + " not found"));
     }
 
+    @Transactional(readOnly = true)
     public List<User> getAll() {
         return userRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> AuthorizationException.userWithEmailNotFound(email));
     }
 
+    @Transactional(readOnly = true)
     public User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> AuthorizationException.userWithIdNotFound(id));
     }
@@ -98,6 +104,8 @@ public class UserService {
                 .orElseThrow(() -> AuthorizationException.userWithUsernameNotFound(userRequestDTO.username()));
         if (passwordEncoder.matches(userRequestDTO.password(), delete.getPassword())) {
             userRepository.delete(delete);
+        }else{
+            throw new AuthenticationServiceException("User password does not match.");
         }
     }
 
@@ -107,5 +115,9 @@ public class UserService {
 
     public List<Role> getRoles() {
         return roleRepository.findAll();
+    }
+
+    public void deleteByUsername(String username) {
+        userRepository.deleteByUsername(username);
     }
 }

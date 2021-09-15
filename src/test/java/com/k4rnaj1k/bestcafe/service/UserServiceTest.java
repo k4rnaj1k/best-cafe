@@ -1,5 +1,6 @@
-package com.k4rnaj1k.bestcafe;
+package com.k4rnaj1k.bestcafe.service;
 
+import com.k4rnaj1k.bestcafe.UserUtils;
 import com.k4rnaj1k.bestcafe.dto.auth.RegistrationRequestDTO;
 import com.k4rnaj1k.bestcafe.dto.auth.RoleDTO;
 import com.k4rnaj1k.bestcafe.dto.auth.UserRoleUpdateDTO;

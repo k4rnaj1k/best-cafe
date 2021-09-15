@@ -43,12 +43,6 @@ public class Dish {
         Dish dish = new Dish();
         dish.setName(dishPostDTO.name());
         List<Ingredient> ingredients = new ArrayList<>();
-        dishPostDTO.ingredients().forEach(id -> {
-            Ingredient ingredient = new Ingredient();
-            ingredient.setId(id);
-            ingredients.add(ingredient);
-        });
-        dish.setIngredients(ingredients);
         dish.setPrice(dishPostDTO.price());
         return dish;
     }

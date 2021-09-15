@@ -11,10 +11,13 @@ import com.k4rnaj1k.bestcafe.repository.menu.DishRepository;
 import com.k4rnaj1k.bestcafe.repository.menu.DrinkRepository;
 import com.k4rnaj1k.bestcafe.repository.menu.IngredientRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class MenuService {
     private final DishRepository dishRepository;
     private final DrinkRepository drinkRepository;

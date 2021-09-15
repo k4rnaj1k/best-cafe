@@ -1,6 +1,9 @@
 package com.k4rnaj1k.bestcafe.dto.auth;
 
-public record RegistrationRequestDTO(String username,
-                                     String email,
-                                     String password) {
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
+public record RegistrationRequestDTO(@NotBlank String username,
+                                     @Email String email,
+                                     @NotBlank String password) {
 }
