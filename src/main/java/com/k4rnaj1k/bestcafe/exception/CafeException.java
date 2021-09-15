@@ -55,4 +55,8 @@ public final class CafeException {
     public static ResponseStatusException drinkExistsException(String name) {
         return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Drink with name " + name + " already exists");
     }
+
+    public static ResponseStatusException drinkDoesntExist(Long drinkId) {
+        return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Drink with id " + drinkId + " doesn't exists");
+    }
 }

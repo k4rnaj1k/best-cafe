@@ -1,24 +1,33 @@
 package com.k4rnaj1k.bestcafe.service;
 
 import com.k4rnaj1k.bestcafe.dto.order.OrderDTO;
+import com.k4rnaj1k.bestcafe.dto.order.OrderResponseDTO;
 import com.k4rnaj1k.bestcafe.exception.CafeException;
 import com.k4rnaj1k.bestcafe.model.auth.Role;
 import com.k4rnaj1k.bestcafe.model.auth.User;
+import com.k4rnaj1k.bestcafe.model.menu.Drink;
+import com.k4rnaj1k.bestcafe.model.order.DrinkOrder;
 import com.k4rnaj1k.bestcafe.model.order.Order;
 import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
 import com.k4rnaj1k.bestcafe.repository.menu.DishRepository;
+import com.k4rnaj1k.bestcafe.repository.menu.DrinkRepository;
 import com.k4rnaj1k.bestcafe.repository.menu.IngredientRepository;
 import com.k4rnaj1k.bestcafe.repository.order.DishOrderRepository;
 import com.k4rnaj1k.bestcafe.repository.order.DrinkOrderRepository;
 import com.k4rnaj1k.bestcafe.repository.order.OrderRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
+@AllArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
     private final DrinkOrderRepository drinkOrderRepository;
@@ -26,32 +35,39 @@ public class OrderService {
     private final RoleRepository roleRepository;
     private final IngredientRepository ingredientRepository;
     private final DishRepository dishRepository;
+    private final DrinkRepository drinkRepository;
 
-    public OrderService(OrderRepository orderRepository, DrinkOrderRepository drinkOrderRepository, DishOrderRepository dishOrderRepository, RoleRepository roleRepository, IngredientRepository ingredientRepository, DishRepository dishRepository) {
-        this.orderRepository = orderRepository;
-        this.drinkOrderRepository = drinkOrderRepository;
-        this.dishOrderRepository = dishOrderRepository;
-        this.roleRepository = roleRepository;
-        this.ingredientRepository = ingredientRepository;
-        this.dishRepository = dishRepository;
-    }
 
-    public Order createOrder(OrderDTO orderDTO, User user) {
+    public OrderResponseDTO createOrder(OrderDTO orderDTO, User user) {
         Order order = Order.fromDTO(orderDTO);
         order.setUser(user);
 
         if (order.getDishes().size() == 0 && order.getDrinks().size() == 0) {
             throw CafeException.emptyOrderException();
         }
-
         loadOrderFields(order);
 
+        //order.setDrinks(drinkOrderRepository.saveAll());
         order.setDishes(dishOrderRepository.saveAll(order.getDishes()));
         order.setDrinks(drinkOrderRepository.saveAll(order.getDrinks()));
-        return orderRepository.save(order);
+   //     return orderRepository.save(order);
+        return OrderResponseDTO.fromOrder(orderRepository.save(order), orderDTO.dishes(), orderDTO.drinks());
     }
 
     private void loadOrderFields(Order order) {
+        loadDishes(order);
+        loadDrinks(order);
+
+    }
+
+    private void loadDrinks(Order order) {
+        order.getDrinks().forEach(drinkOrder -> {
+            Long drinkId = drinkOrder.getDrink().getId();
+            drinkOrder.setDrink(drinkRepository.findById(drinkId).orElseThrow(()->CafeException.drinkDoesntExist(drinkId)));
+        });
+    }
+
+    private void loadDishes(Order order) {
         order.getDishes().forEach(dishOrder -> {
             Long dishId = dishOrder.getDish().getId();
             dishOrder.setDish(dishRepository.findById(dishId).orElseThrow(() -> CafeException.dishDoesntExist(dishId)));
