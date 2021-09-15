@@ -4,6 +4,7 @@ import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.security.jwt.JwtUserFactory;
 import com.k4rnaj1k.bestcafe.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class JwtUserDetailsService implements UserDetailsService {
     private final UserService userService;
 
-    public JwtUserDetailsService(UserService userService) {
+    public JwtUserDetailsService(@Lazy UserService userService) {
         this.userService = userService;
     }
 
