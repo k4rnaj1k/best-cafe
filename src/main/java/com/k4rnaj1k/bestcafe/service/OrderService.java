@@ -87,6 +87,7 @@ public class OrderService {
         ));
     }
 
+    @Transactional(readOnly = true)
     public List<Order> getOrders(User user) {
         List<Role> userRoles = user.getRoles();
         if (userRoles.contains(roleRepository.findByName("ROLE_ADMIN")) || userRoles.contains(roleRepository.findByName("ROLE_COOK")))
