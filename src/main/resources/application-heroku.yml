@@ -3,6 +3,8 @@ spring:
     url: ${DATABASE_URL}
   jpa:
     open-in-view: false
+    hibernate:
+      ddl-auto: validate
 server:
   error:
     include-exception: true
