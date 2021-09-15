@@ -6,11 +6,9 @@ import com.k4rnaj1k.bestcafe.dto.auth.UserRoleUpdateDTO;
 import com.k4rnaj1k.bestcafe.model.auth.Role;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.service.UserService;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.extensions.Extension;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.tags.Tags;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,7 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@OpenAPIDefinition(tags=@Tag(name="admin"))
+@Transactional
+@Tag(name="admin")
 public class AdminController {
     private final UserService userService;
 
@@ -28,19 +27,19 @@ public class AdminController {
         this.userService = userService;
     }
 
+    @Transactional(readOnly = true)
     @PutMapping(Routes.USERS + "/roles")
-    @Tags(@Tag(name="admin"))
     public UserDTO updateUserRoles(@RequestBody @Valid UserRoleUpdateDTO updateDTO) {
         return UserDTO.fromUser(userService.updateUserRoles(updateDTO));
     }
 
-    @Tags(@Tag(name="admin"))
+    @Transactional(readOnly = true)
     @DeleteMapping(Routes.USERS + "/{name}")
     public void deleteUser(@PathVariable(name = "name") String username) {
         userService.deleteByUsername(username);
     }
 
-    @Tags(@Tag(name="admin"))
+    @Transactional(readOnly = true)
     @GetMapping(Routes.ADMIN)
     public List<UserDTO> getAll() {
         List<User> users = userService.getAll();
