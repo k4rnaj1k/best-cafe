@@ -5,8 +5,6 @@ import com.k4rnaj1k.bestcafe.dto.order.OrderResponseDTO;
 import com.k4rnaj1k.bestcafe.exception.CafeException;
 import com.k4rnaj1k.bestcafe.model.auth.Role;
 import com.k4rnaj1k.bestcafe.model.auth.User;
-import com.k4rnaj1k.bestcafe.model.menu.Drink;
-import com.k4rnaj1k.bestcafe.model.order.DrinkOrder;
 import com.k4rnaj1k.bestcafe.model.order.Order;
 import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
 import com.k4rnaj1k.bestcafe.repository.menu.DishRepository;
@@ -22,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,7 +47,7 @@ public class OrderService {
         //order.setDrinks(drinkOrderRepository.saveAll());
         order.setDishes(dishOrderRepository.saveAll(order.getDishes()));
         order.setDrinks(drinkOrderRepository.saveAll(order.getDrinks()));
-   //     return orderRepository.save(order);
+        //     return orderRepository.save(order);
         return OrderResponseDTO.fromOrder(orderRepository.save(order), orderDTO.dishes(), orderDTO.drinks());
     }
 
@@ -63,7 +60,7 @@ public class OrderService {
     private void loadDrinks(Order order) {
         order.getDrinks().forEach(drinkOrder -> {
             Long drinkId = drinkOrder.getDrink().getId();
-            drinkOrder.setDrink(drinkRepository.findById(drinkId).orElseThrow(()->CafeException.drinkDoesntExist(drinkId)));
+            drinkOrder.setDrink(drinkRepository.findById(drinkId).orElseThrow(() -> CafeException.drinkDoesntExist(drinkId)));
         });
     }
 

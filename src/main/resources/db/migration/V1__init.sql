@@ -103,17 +103,20 @@ CREATE TABLE user_roles
 
 COPY roles (id, name) FROM stdin;
 1	ROLE_USER
-2	ROLE_ADMIN
-3	ROLE_COOK
+2	ROLE_COOK
+3	ROLE_ADMIN
 \.
 
-COPY users (id, email, first_name, last_name, password, username) FROM stdin;
-1	test@email.com	\N	\N	$2a$10$3jHQnfbFomLLndXbfbyq3.Jim/teSU9.E1fRp/rl5XEmPK.lETn0e	k4rnaj1k
-\.
+INSERT INTO users (email, password, username)
+VALUES ('admin@email.com', '$2a$12$ugJ4k8UpmOd/5RhijZxs8.GLPE02YPViRqvn6Oh/mwrH0j6v/gkPK', 'admin'),
+       ('cook@email.com', '$2a$12$hc.kMS6MUjuhMau9UKbHJeF4T3BeGsiF9C1ti/x7qx3a33IniNn0q', 'cook'),
+       ('user@email.com', '$2a$12$59yl4h/sB8bFcDZFlCBkaO4.5RCsrvfo.IYYYUkk09aBInJ.iWuB2', 'user');
 
-COPY user_roles (user_id, role_id) FROM stdin;
-1	1
-1	2
-1	3
-\.
+INSERT INTO user_roles (user_id, role_id)
+VALUES (1, 1),
+       (1, 2),
+       (1, 3),
+       (2, 1),
+       (2, 2),
+       (3, 1);
 

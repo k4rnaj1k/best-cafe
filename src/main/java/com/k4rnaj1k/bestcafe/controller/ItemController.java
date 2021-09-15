@@ -101,5 +101,11 @@ public class ItemController {
     public Drink createDrink(@RequestBody @Valid DrinkPostDTO drinkPostDTO) {
         return itemService.createDrink(drinkPostDTO);
     }
+
+    @Tag(name = "drinks")
+    @DeleteMapping(Routes.DRINKS + "/{id}")
+    public void removeDrink(@PathVariable("id") Long drinkId) {
+        itemService.removeDrinkById(drinkId);
+    }
     //endregion
 }

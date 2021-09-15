@@ -6,7 +6,6 @@ import com.k4rnaj1k.bestcafe.dto.auth.RoleDTO;
 import com.k4rnaj1k.bestcafe.dto.auth.UserRoleUpdateDTO;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
-import com.k4rnaj1k.bestcafe.service.UserService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -65,8 +64,8 @@ public class UserServiceTest {
 
     @Test
     @Order(3)
-    public void createDuplicateUser(){
+    public void createDuplicateUser() {
         RegistrationRequestDTO requestDTO = new RegistrationRequestDTO("admin", "admin@email.com", "admin");
-        Assertions.assertThrows(AuthenticationServiceException.class, ()->userService.createUser(requestDTO));
+        Assertions.assertThrows(AuthenticationServiceException.class, () -> userService.createUser(requestDTO));
     }
 }

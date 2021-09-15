@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.k4rnaj1k.bestcafe.model.menu.Drink;
 import org.springframework.data.annotation.Reference;
 
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 
 public record DrinkOrderDTO(

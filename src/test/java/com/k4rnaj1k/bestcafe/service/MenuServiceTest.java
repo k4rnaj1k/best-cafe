@@ -6,7 +6,6 @@ import com.k4rnaj1k.bestcafe.dto.menuitem.IngredientDTO;
 import com.k4rnaj1k.bestcafe.exception.CafeException;
 import com.k4rnaj1k.bestcafe.repository.menu.DishRepository;
 import com.k4rnaj1k.bestcafe.repository.menu.IngredientRepository;
-import com.k4rnaj1k.bestcafe.service.MenuService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

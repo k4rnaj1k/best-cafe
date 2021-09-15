@@ -7,7 +7,6 @@ import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
 import com.k4rnaj1k.bestcafe.repository.auth.UserRepository;
 import com.k4rnaj1k.bestcafe.security.jwt.JwtTokenProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -106,7 +105,7 @@ public class UserService {
                 .orElseThrow(() -> AuthorizationException.userWithUsernameNotFound(userRequestDTO.username()));
         if (passwordEncoder.matches(userRequestDTO.password(), delete.getPassword())) {
             userRepository.delete(delete);
-        }else{
+        } else {
             throw new AuthenticationServiceException("User password does not match.");
         }
     }

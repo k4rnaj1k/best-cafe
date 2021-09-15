@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -29,10 +28,12 @@ public class MenuService {
         this.ingredientRepository = ingredientRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<Drink> getDrinks() {
         return drinkRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public List<Dish> getDishes() {
         return dishRepository.findAll();
     }
@@ -62,6 +63,7 @@ public class MenuService {
         return ingredientRepository.save(ingredientFromDb);
     }
 
+    @Transactional(readOnly = true)
     public List<Ingredient> getIngredients() {
         return ingredientRepository.findAll();
     }
@@ -83,6 +85,7 @@ public class MenuService {
         return ingredientRepository.findById(ingredientId).orElseThrow(() -> CafeException.ingredientDoesntExist(ingredientId));
     }
 
+    @Transactional(readOnly = true)
     public Dish getDishWithId(Long dishId) {
         return dishRepository.findById(dishId)
                 .orElseThrow(() -> CafeException.dishDoesntExist(dishId));
@@ -116,5 +119,9 @@ public class MenuService {
     public IngredientDTO getIngredientById(Long id) {
         Ingredient ingredient = getIngredient(id);
         return new IngredientDTO(ingredient.getName());
+    }
+
+    public void removeDrinkById(Long drinkId) {
+        drinkRepository.deleteById(drinkId);
     }
 }

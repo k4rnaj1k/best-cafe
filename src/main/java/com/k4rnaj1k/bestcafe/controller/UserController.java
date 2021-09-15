@@ -6,7 +6,6 @@ import com.k4rnaj1k.bestcafe.dto.user.UserResponceDTO;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.tags.Tags;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,13 +27,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(Routes.USERS + "/register")
+    @PostMapping(Routes.REGISTER)
     public UserTokenDTO register(@RequestBody @Valid RegistrationRequestDTO requestDTO) {
         var user = userService.createUser(requestDTO);
         return userService.getToken(user);
     }
 
-    @PostMapping(Routes.USERS + "/login")
+    @PostMapping(Routes.LOGIN)
     public UserTokenDTO login(@RequestBody @Valid AuthenticationRequestDTO requestDTO) {
         String username = requestDTO.username();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDTO.password()));

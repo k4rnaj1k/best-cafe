@@ -42,18 +42,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(Routes.LOGIN).anonymous()
 
                 //order controller
-                .antMatchers(HttpMethod.PUT, Routes.ORDERS+"/{\\d+}").hasRole("USER")
+                .antMatchers(HttpMethod.PUT, Routes.ORDERS + "/{\\d+}").hasRole("USER")
                 .antMatchers(HttpMethod.PUT, Routes.ORDERS_STATUS).hasAnyRole("COOK", "ADMIN")
                 .antMatchers(Routes.ORDERS).authenticated()
 
                 //item controller
-                .antMatchers(Routes.INGREDIENTS+"/{\\d+}").hasAnyRole("ADMIN", "COOK")
-                .antMatchers(Routes.DISHES+"{\\d+}").hasAnyRole("ADMIN", "COOK")
+                .antMatchers(Routes.INGREDIENTS + "/{\\d+}").hasAnyRole("ADMIN", "COOK")
+                .antMatchers(Routes.DISHES + "{\\d+}").hasAnyRole("ADMIN", "COOK")
+                .antMatchers(Routes.DRINKS + "{\\d+}").hasAnyRole("ADMIN", "COOK")
                 .antMatchers(HttpMethod.GET, Routes.DISHES, Routes.DRINKS).anonymous()
                 .antMatchers(HttpMethod.POST, Routes.DISHES, Routes.INGREDIENTS, Routes.DRINKS).hasAnyRole("ADMIN", "COOK")
 
                 //admin controller
-                .antMatchers(Routes.USER_ROLES, Routes.USERS+"{\\d+}", Routes.ADMIN).hasRole("ADMIN")
+                .antMatchers(Routes.USER_ROLES, Routes.USERS + "{\\d+}", Routes.ADMIN).hasRole("ADMIN")
 
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
