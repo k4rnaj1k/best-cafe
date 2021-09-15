@@ -7,6 +7,8 @@ import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
 import com.k4rnaj1k.bestcafe.repository.auth.UserRepository;
 import com.k4rnaj1k.bestcafe.security.jwt.JwtTokenProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,7 +26,7 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder, @Lazy JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
