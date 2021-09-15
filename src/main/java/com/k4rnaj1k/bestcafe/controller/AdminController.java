@@ -6,6 +6,8 @@ import com.k4rnaj1k.bestcafe.dto.auth.UserRoleUpdateDTO;
 import com.k4rnaj1k.bestcafe.model.auth.Role;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.service.UserService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
