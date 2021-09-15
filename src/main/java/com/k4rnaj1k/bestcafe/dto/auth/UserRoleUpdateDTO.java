@@ -1,12 +1,10 @@
 package com.k4rnaj1k.bestcafe.dto.auth;
 
-import lombok.Data;
-
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Data
-public class UserRoleUpdateDTO {
-    private String username;
-    private List<RoleDTO> addRoles;
-    private List<RoleDTO> removeRoles;
+public record UserRoleUpdateDTO(@NotBlank String username,
+                                @NotNull List<RoleDTO> addRoles,
+                                @NotNull List<RoleDTO> removeRoles) {
 }

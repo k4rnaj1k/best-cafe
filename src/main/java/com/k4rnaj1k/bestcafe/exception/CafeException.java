@@ -47,4 +47,16 @@ public final class CafeException {
     public static ResponseStatusException excludedIngredientsException() {
         return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Excluded ingredient that is not present in the dish.");
     }
+
+    public static ResponseStatusException dishAlreadyExists(String name) {
+        return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dish with name " + name + " already exists.");
+    }
+
+    public static ResponseStatusException drinkExistsException(String name) {
+        return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Drink with name " + name + " already exists");
+    }
+
+    public static ResponseStatusException drinkDoesntExist(Long drinkId) {
+        return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Drink with id " + drinkId + " doesn't exists");
+    }
 }

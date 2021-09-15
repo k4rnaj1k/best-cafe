@@ -1,10 +1,7 @@
 package com.k4rnaj1k.bestcafe.dto.auth;
 
-import lombok.Data;
+import javax.validation.constraints.NotBlank;
 
-@Data
-public class DeleteUserRequestDTO {
-    private String username;
-
-    private String password;
+public record DeleteUserRequestDTO(@NotBlank String username,
+                                   @NotBlank String password) {
 }

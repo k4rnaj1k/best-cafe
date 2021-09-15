@@ -4,12 +4,17 @@ spring:
     username: ${DB_USER}
     password: ${DB_PASSWORD}
   jpa:
-    open-in-view: on
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  mvc:
+    servlet:
+      path: /api/v1
 server:
   error:
     include-exception: true
     include-message: always
-
+    include-binding-errors: always
 jwt:
   token:
     secret: "k4rnaj1ks-cafe"

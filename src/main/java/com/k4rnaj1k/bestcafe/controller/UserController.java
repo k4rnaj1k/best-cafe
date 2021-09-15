@@ -1,22 +1,23 @@
 package com.k4rnaj1k.bestcafe.controller;
 
 import com.k4rnaj1k.bestcafe.Routes;
-import com.k4rnaj1k.bestcafe.dto.auth.UserUpdateDTO;
-import com.k4rnaj1k.bestcafe.dto.auth.AuthenticationRequestDTO;
-import com.k4rnaj1k.bestcafe.dto.auth.DeleteUserRequestDTO;
-import com.k4rnaj1k.bestcafe.dto.auth.RegistrationRequestDTO;
-import com.k4rnaj1k.bestcafe.dto.auth.UserTokenDTO;
+import com.k4rnaj1k.bestcafe.dto.auth.*;
 import com.k4rnaj1k.bestcafe.dto.user.UserResponceDTO;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
-@RequestMapping(Routes.USERS)
+@Tag(name = "users")
+@Transactional
 public class UserController {
 
     private final AuthenticationManager authenticationManager;
@@ -27,28 +28,28 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("register")
-    public UserTokenDTO register(@RequestBody RegistrationRequestDTO requestDTO) {
+    @PostMapping(Routes.USERS + "/register")
+    public UserTokenDTO register(@RequestBody @Valid RegistrationRequestDTO requestDTO) {
         var user = userService.createUser(requestDTO);
         return userService.getToken(user);
     }
 
-    @PostMapping("login")
-    public UserTokenDTO login(@RequestBody AuthenticationRequestDTO requestDTO) {
-        String username = requestDTO.getUsername();
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDTO.getPassword()));
+    @PostMapping(Routes.USERS + "/login")
+    public UserTokenDTO login(@RequestBody @Valid AuthenticationRequestDTO requestDTO) {
+        String username = requestDTO.username();
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDTO.password()));
         User user = userService.findByUsername(username);
         return userService.getToken(user);
     }
 
-    @PutMapping
-    public UserResponceDTO updateUserDetails(@RequestBody UserUpdateDTO userUpdateDTO, Principal principal){
+    @PutMapping(Routes.USERS)
+    public UserResponceDTO updateUserDetails(@RequestBody @Valid UserUpdateDTO userUpdateDTO, Principal principal) {
         User updatedUser = userService.updateUser(userUpdateDTO, principal.getName());
         return UserResponceDTO.fromUser(updatedUser);
     }
 
-    @DeleteMapping
-    public void deleteUser(@RequestBody DeleteUserRequestDTO userRequestDTO){
+    @DeleteMapping(Routes.USERS)
+    public void deleteUser(@RequestBody @Valid DeleteUserRequestDTO userRequestDTO) {
         userService.deleteUser(userRequestDTO);
     }
 }

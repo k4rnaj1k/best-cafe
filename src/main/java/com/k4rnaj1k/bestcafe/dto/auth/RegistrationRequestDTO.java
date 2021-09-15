@@ -1,10 +1,9 @@
 package com.k4rnaj1k.bestcafe.dto.auth;
 
-import lombok.Data;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
-@Data
-public class RegistrationRequestDTO {
-    private String username;
-    private String email;
-    private String password;
+public record RegistrationRequestDTO(@NotBlank String username,
+                                     @Email String email,
+                                     @NotBlank String password) {
 }

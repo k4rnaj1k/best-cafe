@@ -4,14 +4,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.k4rnaj1k.bestcafe.dto.order.OrderDTO;
 import com.k4rnaj1k.bestcafe.model.auth.User;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -20,15 +25,15 @@ public class Order {
     private Long id;
 
     @OneToMany
-//    @JsonIgnoreProperties("order")
+    @ToString.Exclude
     private List<DishOrder> dishes = new ArrayList<>();
 
     private OrderStatus status;
 
-    @Column(name="created_at")
+    @Column(name = "created_at")
     private Instant createdAt;
 
-    @Column(name="updated_at")
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     @ManyToOne
@@ -45,13 +50,13 @@ public class Order {
     public static Order fromDTO(OrderDTO orderDTO) {
         Order order = new Order();
         List<DishOrder> dishes = new ArrayList<>();
-        orderDTO.getDishes().forEach(dishOrderDTO -> {
+        orderDTO.dishes().forEach(dishOrderDTO -> {
             DishOrder dishOrder = DishOrder.fromDTO(dishOrderDTO);
             dishes.add(dishOrder);
         });
         order.setDishes(dishes);
         List<DrinkOrder> drinks = new ArrayList<>();
-        orderDTO.getDrinks().forEach(drinkOrderDTO -> {
+        orderDTO.drinks().forEach(drinkOrderDTO -> {
             DrinkOrder drinkOrder = DrinkOrder.fromDTO(drinkOrderDTO);
             drinks.add(drinkOrder);
         });
@@ -75,7 +80,7 @@ public class Order {
     }
 
     @JsonProperty("price")
-    public Double getPrice(){
+    public Double getPrice() {
         Double price = 0d;
         for (DishOrder dish :
                 dishes) {
@@ -90,5 +95,19 @@ public class Order {
     }
 
     @OneToMany
+    @ToString.Exclude
     private List<DrinkOrder> drinks = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return Objects.equals(id, order.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

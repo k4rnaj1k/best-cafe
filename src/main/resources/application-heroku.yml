@@ -2,7 +2,9 @@ spring:
   datasource:
     url: ${DATABASE_URL}
   jpa:
-    open-in-view: on
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
 server:
   error:
     include-exception: true

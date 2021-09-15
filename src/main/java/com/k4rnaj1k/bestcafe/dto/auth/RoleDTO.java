@@ -1,8 +1,6 @@
 package com.k4rnaj1k.bestcafe.dto.auth;
 
-import lombok.Data;
+import javax.validation.constraints.NotBlank;
 
-@Data
-public class RoleDTO {
-    private String name;
+public record RoleDTO(@NotBlank String name) {
 }
