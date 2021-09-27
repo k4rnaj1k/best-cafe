@@ -4,6 +4,7 @@ sudo: true
 before_install:
   - chmod +x mvnw
 deploy:
+  skip_cleanup: true
   on:
     branch: master
   provider: heroku
