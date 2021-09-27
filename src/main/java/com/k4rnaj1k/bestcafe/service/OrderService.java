@@ -1,10 +1,14 @@
 package com.k4rnaj1k.bestcafe.service;
 
 import com.k4rnaj1k.bestcafe.dto.order.OrderDTO;
-import com.k4rnaj1k.bestcafe.dto.order.OrderResponseDTO;
+import com.k4rnaj1k.bestcafe.dto.order.responce.DishOrderResponseDTO;
+import com.k4rnaj1k.bestcafe.dto.order.responce.DrinkOrderResponceDTO;
+import com.k4rnaj1k.bestcafe.dto.order.responce.OrderResponseDTO;
 import com.k4rnaj1k.bestcafe.exception.CafeException;
 import com.k4rnaj1k.bestcafe.model.auth.Role;
 import com.k4rnaj1k.bestcafe.model.auth.User;
+import com.k4rnaj1k.bestcafe.model.order.DishOrder;
+import com.k4rnaj1k.bestcafe.model.order.DrinkOrder;
 import com.k4rnaj1k.bestcafe.model.order.Order;
 import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
 import com.k4rnaj1k.bestcafe.repository.menu.DishRepository;
@@ -20,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,11 +49,12 @@ public class OrderService {
         }
         loadOrderFields(order);
 
-        //order.setDrinks(drinkOrderRepository.saveAll());
         order.setDishes(dishOrderRepository.saveAll(order.getDishes()));
         order.setDrinks(drinkOrderRepository.saveAll(order.getDrinks()));
-        //     return orderRepository.save(order);
-        return OrderResponseDTO.fromOrder(orderRepository.save(order), orderDTO.dishes(), orderDTO.drinks());
+
+        order = orderRepository.save(order);
+
+        return OrderResponseDTO.fromOrder(order, mapDishesToResponceDTO(order.getDishes()), mapDrinksToResponceDTO(order.getDrinks()));
     }
 
     private void loadOrderFields(Order order) {
@@ -85,22 +91,46 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<Order> getOrders(User user) {
+    public List<OrderResponseDTO> getOrders(User user) {
         List<Role> userRoles = user.getRoles();
+        List<Order> orders;
         if (userRoles.contains(roleRepository.findByName("ROLE_ADMIN")) || userRoles.contains(roleRepository.findByName("ROLE_COOK")))
-            return orderRepository.findAll();
+            orders = orderRepository.findAll();
         else
-            return orderRepository.findAllByUser(user);
+            orders = orderRepository.findAllByUser(user);
+        return orders.stream().map(this::mapToResponseDTO).toList();
     }
 
-    public Order updateOrderStatus(Long orderId, Order.OrderStatus updatedOrderStatus) {
+    private OrderResponseDTO mapToResponseDTO(Order order) {
+        List<DishOrderResponseDTO> dishResponse = mapDishesToResponceDTO(order.getDishes());
+        List<DrinkOrderResponceDTO> drinkResponse = mapDrinksToResponceDTO(order.getDrinks());
+        return OrderResponseDTO.fromOrder(order, dishResponse, drinkResponse);
+    }
+
+    private List<DrinkOrderResponceDTO> mapDrinksToResponceDTO(List<DrinkOrder> drinks) {
+        List<DrinkOrderResponceDTO> result = new ArrayList<>();
+        drinks.forEach(drinkOrder ->
+                result.add(new DrinkOrderResponceDTO(drinkOrder.getDrink().getId(), drinkOrder.getDrink().getName(), drinkOrder.getAmount(), drinkOrder.getDrink().getPrice()))
+        );
+        return result;
+    }
+
+    private List<DishOrderResponseDTO> mapDishesToResponceDTO(List<DishOrder> dishOrders) {
+        List<DishOrderResponseDTO> result = new ArrayList<>();
+        dishOrders.forEach(dishOrder ->
+                result.add(new DishOrderResponseDTO(dishOrder.getDish().getId(), dishOrder.getDish().getName(), dishOrder.getAmount(), dishOrder.getDish().getPrice()))
+        );
+        return result;
+    }
+
+    public OrderResponseDTO updateOrderStatus(Long orderId, Order.OrderStatus updatedOrderStatus) {
         Order orderFromDb = getOrderById(orderId);
         orderFromDb.setUpdatedAt(Instant.now());
         if (orderFromDb.getStatus().getValue() >= updatedOrderStatus.getValue()) {
             throw CafeException.orderStatusException();
         }
         orderFromDb.setStatus(updatedOrderStatus);
-        return orderRepository.save(orderFromDb);
+        return mapToResponseDTO(orderRepository.save(orderFromDb));
     }
 
     private Order getOrderById(Long orderId) {
