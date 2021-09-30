@@ -4,7 +4,7 @@ import com.k4rnaj1k.bestcafe.dto.order.OrderDTO;
 import com.k4rnaj1k.bestcafe.dto.order.responce.DishOrderResponseDTO;
 import com.k4rnaj1k.bestcafe.dto.order.responce.DrinkOrderResponceDTO;
 import com.k4rnaj1k.bestcafe.dto.order.responce.OrderResponseDTO;
-import com.k4rnaj1k.bestcafe.exception.CafeException;
+import com.k4rnaj1k.bestcafe.exception.CafeExceptionUtils;
 import com.k4rnaj1k.bestcafe.model.auth.Role;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.model.order.DishOrder;
@@ -45,7 +45,7 @@ public class OrderService {
         order.setUser(user);
 
         if (order.getDishes().size() == 0 && order.getDrinks().size() == 0) {
-            throw CafeException.emptyOrderException();
+            throw CafeExceptionUtils.emptyOrderException();
         }
         loadOrderFields(order);
 
@@ -66,26 +66,26 @@ public class OrderService {
     private void loadDrinks(Order order) {
         order.getDrinks().forEach(drinkOrder -> {
             Long drinkId = drinkOrder.getDrink().getId();
-            drinkOrder.setDrink(drinkRepository.findById(drinkId).orElseThrow(() -> CafeException.drinkDoesntExist(drinkId)));
+            drinkOrder.setDrink(drinkRepository.findById(drinkId).orElseThrow(() -> CafeExceptionUtils.drinkDoesntExist(drinkId)));
         });
     }
 
     private void loadDishes(Order order) {
         order.getDishes().forEach(dishOrder -> {
             Long dishId = dishOrder.getDish().getId();
-            dishOrder.setDish(dishRepository.findById(dishId).orElseThrow(() -> CafeException.dishDoesntExist(dishId)));
+            dishOrder.setDish(dishRepository.findById(dishId).orElseThrow(() -> CafeExceptionUtils.dishDoesntExist(dishId)));
         });
 
         order.getDishes().forEach(dishOrder -> {
             if (dishOrder.getDish().getIngredients().size() <= dishOrder.getExcluded().size())
-                throw CafeException.tooManyExcludedIngredientsException();
+                throw CafeExceptionUtils.tooManyExcludedIngredientsException();
             if (!dishOrder.getDish().getIngredients().containsAll(dishOrder.getExcluded())) {
-                throw CafeException.excludedIngredientsException();
+                throw CafeExceptionUtils.excludedIngredientsException();
             }
         });
         order.getDishes().forEach(dishOrder -> dishOrder.getExcluded().forEach(ingredient -> {
                     Long id = ingredient.getId();
-                    ingredient.setName(ingredientRepository.findById(id).orElseThrow(() -> CafeException.ingredientDoesntExist(id)).getName());
+                    ingredient.setName(ingredientRepository.findById(id).orElseThrow(() -> CafeExceptionUtils.ingredientDoesntExist(id)).getName());
                 }
         ));
     }
@@ -127,20 +127,20 @@ public class OrderService {
         Order orderFromDb = getOrderById(orderId);
         orderFromDb.setUpdatedAt(Instant.now());
         if (orderFromDb.getStatus().getValue() >= updatedOrderStatus.getValue()) {
-            throw CafeException.orderStatusException();
+            throw CafeExceptionUtils.orderStatusException();
         }
         orderFromDb.setStatus(updatedOrderStatus);
         return mapToResponseDTO(orderRepository.save(orderFromDb));
     }
 
     private Order getOrderById(Long orderId) {
-        return orderRepository.findById(orderId).orElseThrow(() -> CafeException.orderDoesntExist(orderId));
+        return orderRepository.findById(orderId).orElseThrow(() -> CafeExceptionUtils.orderDoesntExist(orderId));
     }
 
     public Order updateOrder(OrderDTO orderDTO, Long orderId, User user) {
         Order order = getOrderById(orderId);
         if (order.getStatus().getValue() > 1) {
-            throw CafeException.orderAcceptedException(orderId);
+            throw CafeExceptionUtils.orderAcceptedException(orderId);
         }
 
         checkOrderAccess(orderId, user, order);

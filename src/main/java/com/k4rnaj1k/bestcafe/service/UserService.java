@@ -1,7 +1,7 @@
 package com.k4rnaj1k.bestcafe.service;
 
 import com.k4rnaj1k.bestcafe.dto.auth.*;
-import com.k4rnaj1k.bestcafe.exception.AuthorizationException;
+import com.k4rnaj1k.bestcafe.exception.AuthorizationExceptionUtils;
 import com.k4rnaj1k.bestcafe.model.auth.Role;
 import com.k4rnaj1k.bestcafe.model.auth.User;
 import com.k4rnaj1k.bestcafe.repository.auth.RoleRepository;
@@ -44,12 +44,12 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> AuthorizationException.userWithEmailNotFound(email));
+        return userRepository.findByEmail(email).orElseThrow(() -> AuthorizationExceptionUtils.userWithEmailNotFound(email));
     }
 
     @Transactional(readOnly = true)
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> AuthorizationException.userWithIdNotFound(id));
+        return userRepository.findById(id).orElseThrow(() -> AuthorizationExceptionUtils.userWithIdNotFound(id));
     }
 
     public void deleteById(Long id) {
@@ -102,7 +102,7 @@ public class UserService {
 
     public void deleteUser(DeleteUserRequestDTO userRequestDTO) {
         User delete = userRepository.findByUsername(userRequestDTO.username())
-                .orElseThrow(() -> AuthorizationException.userWithUsernameNotFound(userRequestDTO.username()));
+                .orElseThrow(() -> AuthorizationExceptionUtils.userWithUsernameNotFound(userRequestDTO.username()));
         if (passwordEncoder.matches(userRequestDTO.password(), delete.getPassword())) {
             userRepository.delete(delete);
         } else {

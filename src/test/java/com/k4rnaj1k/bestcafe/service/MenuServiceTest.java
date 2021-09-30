@@ -3,7 +3,7 @@ package com.k4rnaj1k.bestcafe.service;
 import com.k4rnaj1k.bestcafe.dto.menuitem.DishPostDTO;
 import com.k4rnaj1k.bestcafe.dto.menuitem.DrinkPostDTO;
 import com.k4rnaj1k.bestcafe.dto.menuitem.IngredientDTO;
-import com.k4rnaj1k.bestcafe.exception.CafeException;
+import com.k4rnaj1k.bestcafe.exception.CafeExceptionUtils;
 import com.k4rnaj1k.bestcafe.repository.menu.DishRepository;
 import com.k4rnaj1k.bestcafe.repository.menu.IngredientRepository;
 import org.junit.jupiter.api.*;
@@ -79,7 +79,7 @@ public class MenuServiceTest {
     @DisplayName("Can delete dish and ingredient.")
     void canDeleteDishAndIngredient() {
         menuService.removeDishById(1L);
-        Assertions.assertDoesNotThrow(() -> menuService.removeIngredientById(1L), CafeException.dishWithOneIngredient(1L).getMessage());
+        Assertions.assertDoesNotThrow(() -> menuService.removeIngredientById(1L), CafeExceptionUtils.dishWithOneIngredient(1L).getMessage());
     }
 
     @Test

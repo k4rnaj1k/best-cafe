@@ -3,8 +3,8 @@ package com.k4rnaj1k.bestcafe.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-public final class CafeException {
-    private CafeException() {
+public final class CafeExceptionUtils {
+    private CafeExceptionUtils() {
 
     }
 
